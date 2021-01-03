@@ -2,7 +2,12 @@ package final_project.travel_agency.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -10,8 +15,10 @@ public class User extends BaseEntity {
     private String username;
     private String password;
     private String email;
+    private Set<Authority> authorities;
 
     public User() {
+        this.authorities = new HashSet<>();
     }
 
     @Column(nullable = false)
@@ -39,5 +46,14 @@ public class User extends BaseEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @OneToMany
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 }
