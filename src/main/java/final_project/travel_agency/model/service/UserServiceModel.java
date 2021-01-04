@@ -2,13 +2,14 @@ package final_project.travel_agency.model.service;
 
 import final_project.travel_agency.model.entity.Authority;
 
+import java.util.List;
 import java.util.Set;
 
 public class UserServiceModel extends BaseServiceModel {
     private String username;
     private String password;
     private String email;
-    private Set<AuthorityServiceModel> authorities;
+    private List<AuthorityServiceModel> authorities;
 
     public UserServiceModel() {
     }
@@ -37,11 +38,11 @@ public class UserServiceModel extends BaseServiceModel {
         this.email = email;
     }
 
-    public Set<AuthorityServiceModel> getAuthorities() {
+    public List<AuthorityServiceModel> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<AuthorityServiceModel> authorities) {
+    public void setAuthorities(List<AuthorityServiceModel> authorities) {
         this.authorities = authorities;
     }
 }

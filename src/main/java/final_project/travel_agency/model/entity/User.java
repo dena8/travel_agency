@@ -1,29 +1,49 @@
 package final_project.travel_agency.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
     private String username;
     private String password;
     private String email;
-    private Set<Authority> authorities;
+    private List<Authority> authorities;
 
     public User() {
-        this.authorities = new HashSet<>();
+
     }
 
     @Column(nullable = false)
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    @Transient
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setUsername(String username) {
@@ -48,12 +68,12 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    @OneToMany
-    public Set<Authority> getAuthorities() {
+    @ManyToMany
+    public List<Authority> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
+    public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
 }
