@@ -17,10 +17,7 @@ public class User extends BaseEntity implements UserDetails {
 
     }
 
-    @Column(nullable = false)
-    public String getUsername() {
-        return username;
-    }
+
 
     @Override
     @Transient
@@ -44,6 +41,11 @@ public class User extends BaseEntity implements UserDetails {
     @Transient
     public boolean isEnabled() {
         return true;
+    }
+
+    @Column(nullable = false)
+    public String getUsername() {
+        return username;
     }
 
     public void setUsername(String username) {

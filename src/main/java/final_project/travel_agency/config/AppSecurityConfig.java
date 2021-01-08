@@ -27,6 +27,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
              auth
                      .userDetailsService(this.userDetailsService)
                      .passwordEncoder(this.bcrypt);
+
     }
 
     protected void configure(HttpSecurity http) throws Exception {
