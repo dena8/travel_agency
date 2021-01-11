@@ -1,8 +1,9 @@
 package final_project.travel_agency.model.view;
 
 public class UserViewModel {
-
     private String username;
+    private String email;
+    //private String password;
 
     public UserViewModel() {
     }
@@ -14,4 +15,13 @@ public class UserViewModel {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }
