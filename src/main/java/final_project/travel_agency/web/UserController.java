@@ -50,13 +50,16 @@ public class UserController {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRegisterBindingModel.getUsername(),userRegisterBindingModel.getPassword()));
         String token = this.jwtUtil.generateToken(this.userService.loadUserByUsername(userRegisterBindingModel.getUsername()));
         HttpHeaders headers = createAuthorizationHeader(token);
-      //  return new ResponseEntity<>("Succsessful login",headers, HttpStatus.OK);
-        return ResponseEntity.ok(gson.toJson(token));
+        ResponseEntity<String> res = new ResponseEntity<>(gson.toJson("Succcessful login"),headers, HttpStatus.OK);
+        System.out.println();
+        return new ResponseEntity<>(gson.toJson("Succcessful login"),headers, HttpStatus.OK);
+      //  return ResponseEntity.ok(gson.toJson(token));
     }
 
     private HttpHeaders createAuthorizationHeader(String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", token);
+        headers.add("ASD", "ASD");
         return headers;
     }
 }
