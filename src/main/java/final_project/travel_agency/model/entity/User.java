@@ -70,7 +70,7 @@ public class User extends BaseEntity implements UserDetails {
         this.email = email;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     public List<Authority> getAuthorities() {
         return authorities;
     }
