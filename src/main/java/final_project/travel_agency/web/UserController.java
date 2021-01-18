@@ -31,7 +31,6 @@ public class UserController {
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.jwtUtil = jwtUtil;
-
         this.authenticationManager = authenticationManager;
         this.gson = gson;
     }

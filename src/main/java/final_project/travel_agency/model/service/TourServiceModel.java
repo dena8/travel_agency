@@ -11,6 +11,7 @@ import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 
 public class TourServiceModel extends BaseServiceModel {
+
     private String name;
     private String description;
     private String  startAndEnd;
@@ -18,6 +19,7 @@ public class TourServiceModel extends BaseServiceModel {
     private String difficultyLevel;
     private String image;
     private BigDecimal price;
+    private Boolean enabled;
     private CategoryServiceModel category;
     private UserServiceModel creator;
 
@@ -88,6 +90,14 @@ public class TourServiceModel extends BaseServiceModel {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public CategoryServiceModel getCategory() {

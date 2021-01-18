@@ -1,11 +1,12 @@
-package final_project.travel_agency.model.entity;
+package final_project.travel_agency.model.view;
 
-import javax.persistence.*;
+
+
+import final_project.travel_agency.model.service.BaseServiceModel;
+
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "tours")
-public class Tour extends BaseEntity {
+public class TourViewModel extends BaseServiceModel {
     private String name;
     private String description;
     private String  startAndEnd;
@@ -13,16 +14,13 @@ public class Tour extends BaseEntity {
     private String difficultyLevel;
     private String image;
     private BigDecimal price;
-    private Boolean enabled = false;
-    private Category category;
-    private User creator;
+    private Boolean enabled;
+    private CategoryViewModel category;
+    private UserViewModel creator;
 
-
-
-    public Tour() {
+    public TourViewModel() {
     }
 
-    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -31,7 +29,6 @@ public class Tour extends BaseEntity {
         this.name = name;
     }
 
-    @Column(nullable = false, columnDefinition = "text")
     public String getDescription() {
         return description;
     }
@@ -40,7 +37,6 @@ public class Tour extends BaseEntity {
         this.description = description;
     }
 
-    @Column
     public String getStartAndEnd() {
         return startAndEnd;
     }
@@ -49,7 +45,6 @@ public class Tour extends BaseEntity {
         this.startAndEnd = startAndEnd;
     }
 
-    @Column(nullable = false)
     public Integer getParticipants() {
         return participants;
     }
@@ -58,7 +53,6 @@ public class Tour extends BaseEntity {
         this.participants = participants;
     }
 
-    @Column
     public String getDifficultyLevel() {
         return difficultyLevel;
     }
@@ -67,7 +61,6 @@ public class Tour extends BaseEntity {
         this.difficultyLevel = difficultyLevel;
     }
 
-    @Column
     public String getImage() {
         return image;
     }
@@ -76,7 +69,6 @@ public class Tour extends BaseEntity {
         this.image = image;
     }
 
-    @Column
     public BigDecimal getPrice() {
         return price;
     }
@@ -85,7 +77,6 @@ public class Tour extends BaseEntity {
         this.price = price;
     }
 
-    @Column(columnDefinition = "boolean default false")
     public Boolean getEnabled() {
         return enabled;
     }
@@ -94,23 +85,19 @@ public class Tour extends BaseEntity {
         this.enabled = enabled;
     }
 
-    @ManyToOne
-    public Category getCategory() {
+    public CategoryViewModel getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategoryViewModel category) {
         this.category = category;
     }
 
-    @ManyToOne
-    public User getCreator() {
+    public UserViewModel getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(UserViewModel creator) {
         this.creator = creator;
     }
-
-
 }

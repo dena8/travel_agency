@@ -1,5 +1,6 @@
 package final_project.travel_agency.service.impl;
 
+import final_project.travel_agency.model.binding.CategoryBindingModel;
 import final_project.travel_agency.model.entity.Category;
 import final_project.travel_agency.model.service.CategoryServiceModel;
 import final_project.travel_agency.repository.CategoryRepository;
@@ -35,6 +36,12 @@ public class CategoryServiceImpl implements CategoryService {
         Category category= this.categoryRepository.findByName(name)
                 .orElseThrow(() -> new NotFoundException("Category not found"));
         return this.modelMapper.map(category,CategoryServiceModel.class);
+    }
+
+    @Override
+    public void createCategory(CategoryBindingModel categoryBindingModel) {
+        CategoryServiceModel categoryServiceModel = this.modelMapper.map(categoryBindingModel,CategoryServiceModel.class);
+        this.categoryRepository.saveAndFlush(this.modelMapper.map(categoryServiceModel,Category.class));
     }
 
 

@@ -1,10 +1,12 @@
 package final_project.travel_agency.web;
 
 import final_project.travel_agency.model.binding.TourBindingModel;
+import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.entity.User;
 import final_project.travel_agency.model.service.CategoryServiceModel;
 import final_project.travel_agency.model.service.TourServiceModel;
 import final_project.travel_agency.model.service.UserServiceModel;
+import final_project.travel_agency.model.view.TourViewModel;
 import final_project.travel_agency.service.CategoryService;
 import final_project.travel_agency.service.TourService;
 import final_project.travel_agency.service.UserService;
@@ -15,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -44,6 +43,18 @@ public class TourController {
         TourServiceModel tourServiceModel= createTourServiceModel(tour, categoryServiceModel, userServiceModel);
         this.tourService.createTour(tourServiceModel);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<TourViewModel[]> getAllTours(){
+      TourServiceModel [] tourServiceModels= this.tourService.getAllTours();
+        return new ResponseEntity<>(this.modelMapper.map(tourServiceModels,TourViewModel[].class), HttpStatus.OK) ;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TourViewModel> getTour( @PathVariable String id) throws NotFoundException {
+        TourServiceModel tourServiceModel= this.tourService.getTourById(id);
+        return new ResponseEntity<>(this.modelMapper.map(tourServiceModel,TourViewModel.class),HttpStatus.OK);
     }
 
     private TourServiceModel createTourServiceModel(@RequestBody @Valid TourBindingModel tour, CategoryServiceModel categoryServiceModel, UserServiceModel userServiceModel) {

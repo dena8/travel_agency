@@ -12,12 +12,16 @@ public class User extends BaseEntity implements UserDetails {
     private String password;
     private String email;
     private List<Authority> authorities;
+    private List<Tour> createdTours = new ArrayList<>();
+    private List<Tour> cart = new ArrayList<>();
+
 
     public User() {
-
+      this.cart = new ArrayList<>();
     }
-
-
+    public User(List<Tour> cart) {
+        this.cart=cart;
+    }
 
     @Override
     @Transient
@@ -77,5 +81,23 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    @ManyToMany
+    public List<Tour> getCreatedTours() {
+        return createdTours;
+    }
+
+    public void setCreatedTours(List<Tour> createdTours) {
+        this.createdTours = createdTours;
+    }
+
+    @ManyToMany
+    public List<Tour> getCart() {
+        return cart;
+    }
+
+    public void setCart(List<Tour> cart) {
+        this.cart = cart;
     }
 }
