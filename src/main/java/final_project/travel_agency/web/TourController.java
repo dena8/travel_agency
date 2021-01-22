@@ -14,6 +14,7 @@ import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +37,7 @@ public class TourController {
         this.userService = userService;
     }
 
+    //@PreAuthorize("hasRole('GUIDE_ROLE')")
     @PostMapping("/create")
     public ResponseEntity<Void> createTour(@Valid @RequestBody TourBindingModel tour) throws NotFoundException {
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());

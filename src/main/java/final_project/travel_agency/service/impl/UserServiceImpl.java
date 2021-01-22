@@ -41,6 +41,8 @@ public class UserServiceImpl implements UserService {
 
         Authority authority = this.authorityRepository.findByAuthority(this.userRepository.count()<1?"ADMIN_ROLE":"USER_ROLE")
                 .orElse(null);
+//        Authority guide = this.authorityRepository.findByAuthority("GUIDE_ROLE")
+//                .orElse(null);
 
         User user = this.modelMapper.map(userService, User.class);
         user.setPassword(this.bcrypt.encode(userService.getPassword()));
@@ -61,13 +63,13 @@ public class UserServiceImpl implements UserService {
 //        System.out.println(col);
        this.userRepository.updateUserCart(user.getId(),tourServiceModel.getId());
       //  this.userRepository.updateU(user.getId(),"new@abv.bg");
-        System.out.println();
+
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userRepository.findByUsername(username).orElse(null);
+        User user = this.userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("No such user exist"));
         if(user == null) throw new UsernameNotFoundException("User is not exit!");
         return user;
 

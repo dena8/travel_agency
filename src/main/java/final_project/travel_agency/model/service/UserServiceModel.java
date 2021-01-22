@@ -8,8 +8,8 @@ import java.util.Set;
 
 public class UserServiceModel extends BaseServiceModel {
     private String username;
-    private String password;
     private String email;
+    private String password;
     private List<AuthorityServiceModel> authorities;
     private List<TourServiceModel> createdTours;
     private List<TourServiceModel> cart = new ArrayList<>();

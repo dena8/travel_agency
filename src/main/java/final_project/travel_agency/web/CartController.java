@@ -11,6 +11,7 @@ import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,6 +46,7 @@ public class CartController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasAuthority('USER_ROLE')")
     @GetMapping("/contain/{id}")
     public ResponseEntity<Boolean> checkIfTourIsAdded(@PathVariable String id) throws NotFoundException {
         User user = this.modelMapper.map(getUser(), User.class);

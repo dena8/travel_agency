@@ -3,16 +3,18 @@ package final_project.travel_agency.web;
 import com.google.gson.Gson;
 import final_project.travel_agency.model.binding.UserRegisterBindingModel;
 import final_project.travel_agency.model.service.UserServiceModel;
+import final_project.travel_agency.model.view.CurrentUserViewModel;
 import final_project.travel_agency.model.view.UserViewModel;
 import final_project.travel_agency.service.UserService;
 import final_project.travel_agency.util.jwt.JwtUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -49,10 +51,17 @@ public class UserController {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRegisterBindingModel.getUsername(),userRegisterBindingModel.getPassword()));
         String token = this.jwtUtil.generateToken(this.userService.loadUserByUsername(userRegisterBindingModel.getUsername()));
         HttpHeaders headers = createAuthorizationHeader(token);
+        System.out.println("TOKEN FROM LOGIN:"+token);
         ResponseEntity<String> res = new ResponseEntity<>(gson.toJson("Succcessful login"),headers, HttpStatus.OK);
         System.out.println();
         return new ResponseEntity<>(gson.toJson("Succcessful login"),headers, HttpStatus.OK);
-      //  return ResponseEntity.ok(gson.toJson(token));
+
+    }
+
+    @GetMapping("/get/current")
+    public ResponseEntity<CurrentUserViewModel> getCurrentUser(){
+       CurrentUserViewModel user = this.modelMapper.map(getUser(),CurrentUserViewModel.class);
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
     private HttpHeaders createAuthorizationHeader(String token) {
@@ -60,5 +69,11 @@ public class UserController {
         headers.add("Authorization", token);
         headers.add("ASD", "ASD");
         return headers;
+    }
+
+    private UserServiceModel getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return this.modelMapper.map(this.userService.loadUserByUsername(username), UserServiceModel.class);
     }
 }

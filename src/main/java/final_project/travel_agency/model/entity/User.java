@@ -1,5 +1,6 @@
 package final_project.travel_agency.model.entity;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -17,11 +18,13 @@ public class User extends BaseEntity implements UserDetails {
 
 
     public User() {
-      this.cart = new ArrayList<>();
+
     }
     public User(List<Tour> cart) {
         this.cart=cart;
     }
+
+
 
     @Override
     @Transient
