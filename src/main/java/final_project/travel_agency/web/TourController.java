@@ -1,8 +1,6 @@
 package final_project.travel_agency.web;
 
 import final_project.travel_agency.model.binding.TourBindingModel;
-import final_project.travel_agency.model.entity.Tour;
-import final_project.travel_agency.model.entity.User;
 import final_project.travel_agency.model.service.CategoryServiceModel;
 import final_project.travel_agency.model.service.TourServiceModel;
 import final_project.travel_agency.model.service.UserServiceModel;

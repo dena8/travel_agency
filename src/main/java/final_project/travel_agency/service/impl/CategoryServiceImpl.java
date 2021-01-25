@@ -1,5 +1,6 @@
 package final_project.travel_agency.service.impl;
 
+import final_project.travel_agency.exception.CategoryNotFound;
 import final_project.travel_agency.model.binding.CategoryBindingModel;
 import final_project.travel_agency.model.entity.Category;
 import final_project.travel_agency.model.service.CategoryServiceModel;
@@ -34,7 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryServiceModel getCategoryByName(String name) throws NotFoundException {
         Category category= this.categoryRepository.findByName(name)
-                .orElseThrow(() -> new NotFoundException("Category not found"));
+               // .orElseThrow(() -> new NotFoundException("Category not found"));
+        .orElseThrow(()-> new CategoryNotFound("Category not found"));
         return this.modelMapper.map(category,CategoryServiceModel.class);
     }
 
