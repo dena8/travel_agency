@@ -46,7 +46,8 @@ public class CartController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //@PreAuthorize("hasAuthority('USER_ROLE')")
+   // @PreAuthorize("hasAuthority('USER_ROLE')")
+    //@PreAuthorize("hasAnyAuthority('USER_ROLE','GUIDE_ROLE','ADMIN_ROLE')")
     @GetMapping("/contain/{id}")
     public ResponseEntity<Boolean> checkIfTourIsAdded(@PathVariable String id) throws NotFoundException {
         User user = this.modelMapper.map(getUser(), User.class);

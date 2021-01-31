@@ -1,11 +1,14 @@
 package final_project.travel_agency.model.binding;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
 public class CategoryBindingModel {
     private String name;
+    private MultipartFile image;
+
 
     public CategoryBindingModel() {
     }
@@ -18,5 +21,13 @@ public class CategoryBindingModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 }

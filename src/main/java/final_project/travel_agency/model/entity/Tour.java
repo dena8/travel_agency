@@ -2,6 +2,7 @@ package final_project.travel_agency.model.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "tours")
@@ -16,6 +17,7 @@ public class Tour extends BaseEntity {
     private Boolean enabled = false;
     private Category category;
     private User creator;
+    private List<String> photos;
 
 
 
@@ -67,7 +69,7 @@ public class Tour extends BaseEntity {
         this.difficultyLevel = difficultyLevel;
     }
 
-    @Column
+
     public String getImage() {
         return image;
     }
@@ -112,5 +114,12 @@ public class Tour extends BaseEntity {
         this.creator = creator;
     }
 
+    @ElementCollection
+    public List<String> getPhotos() {
+        return photos;
+    }
 
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
 }

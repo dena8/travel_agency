@@ -53,6 +53,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/users/*").permitAll()
+                .antMatchers("/image/**").permitAll()
                 .antMatchers("/tours/all").permitAll()
                 .antMatchers("/categories/create","/tours/create").hasAuthority("GUIDE_ROLE")
                 .antMatchers("/cart/**").hasAuthority("USER_ROLE")

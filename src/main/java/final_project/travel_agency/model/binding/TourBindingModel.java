@@ -1,8 +1,8 @@
 package final_project.travel_agency.model.binding;
 
-import final_project.travel_agency.model.entity.Category;
-import final_project.travel_agency.model.entity.User;
+
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
@@ -16,7 +16,7 @@ public class TourBindingModel {
     private String  startAndEnd;
     private Integer participants;
     private String difficultyLevel;
-    private String image;
+    private MultipartFile image;
     private BigDecimal price;
     private String category;
 
@@ -72,11 +72,11 @@ public class TourBindingModel {
     }
 
     @NotNull
-    public String getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 

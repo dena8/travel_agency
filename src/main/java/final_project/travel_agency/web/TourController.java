@@ -11,14 +11,19 @@ import final_project.travel_agency.service.UserService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/tours")
@@ -35,14 +40,22 @@ public class TourController {
         this.userService = userService;
     }
 
-    //@PreAuthorize("hasRole('GUIDE_ROLE')")
-    @PostMapping("/create")
-    public ResponseEntity<Void> createTour(@Valid @RequestBody TourBindingModel tour) throws NotFoundException {
+
+    @PostMapping(value = "/create",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> createTour(@Valid @ModelAttribute("tour") TourBindingModel tour) throws NotFoundException, IOException {
+        saveImageInStatic(tour);
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());
         UserServiceModel userServiceModel = getUser();
         TourServiceModel tourServiceModel= createTourServiceModel(tour, categoryServiceModel, userServiceModel);
+        tourServiceModel.setImage("http://localhost:5000/image/"+tour.getImage().getOriginalFilename());
         this.tourService.createTour(tourServiceModel);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    private void saveImageInStatic(TourBindingModel tour) throws IOException {
+        MultipartFile image = tour.getImage();
+        Files.copy(image.getInputStream(),
+                Paths.get("C:\\Users\\user\\Desktop\\travel_agency\\src\\main\\resources\\static\\image",image.getOriginalFilename()));
     }
 
     @GetMapping("/all")

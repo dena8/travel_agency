@@ -1,12 +1,8 @@
 package final_project.travel_agency.service.impl;
 
-import final_project.travel_agency.model.binding.TourBindingModel;
-import final_project.travel_agency.model.entity.Category;
+
 import final_project.travel_agency.model.entity.Tour;
-import final_project.travel_agency.model.service.CategoryServiceModel;
 import final_project.travel_agency.model.service.TourServiceModel;
-import final_project.travel_agency.model.view.TourViewModel;
-import final_project.travel_agency.repository.CategoryRepository;
 import final_project.travel_agency.repository.TourRepository;
 import final_project.travel_agency.service.TourService;
 import javassist.NotFoundException;
