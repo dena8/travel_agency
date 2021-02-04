@@ -2,11 +2,11 @@ package final_project.travel_agency.service.impl;
 
 
 import final_project.travel_agency.model.entity.Authority;
-import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.entity.User;
 import final_project.travel_agency.model.service.TourServiceModel;
 import final_project.travel_agency.model.service.UserServiceModel;
 import final_project.travel_agency.repository.AuthorityRepository;
+import final_project.travel_agency.repository.TourRepository;
 import final_project.travel_agency.repository.UserRepository;
 import final_project.travel_agency.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -16,22 +16,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final TourRepository tourRepository;
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder bcrypt;
 
 
-    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, AuthorityRepository authorityRepository, PasswordEncoder bcrypt) {
+    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, TourRepository tourRepository, AuthorityRepository authorityRepository, PasswordEncoder bcrypt) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.tourRepository = tourRepository;
         this.authorityRepository = authorityRepository;
         this.bcrypt = bcrypt;
     }
@@ -62,9 +62,11 @@ public class UserServiceImpl implements UserService {
 //        System.out.println(user.getId());
 //        System.out.println(col);
        this.userRepository.updateUserCart(user.getId(),tourServiceModel.getId());
+       this.tourRepository.updateParticipants(tourServiceModel.getId());
       //  this.userRepository.updateU(user.getId(),"new@abv.bg");
 
     }
+
 
 
     @Override
@@ -85,6 +87,9 @@ public class UserServiceImpl implements UserService {
                 .authorities(roles)
                 .build();*/
     }
+
+
+
 
 
 

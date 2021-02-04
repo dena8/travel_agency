@@ -15,4 +15,5 @@ public interface UserService extends UserDetailsService {
 
     void addTourToCart(User user, TourServiceModel tourServiceModel);
 
+
 }

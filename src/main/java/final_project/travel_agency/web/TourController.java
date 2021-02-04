@@ -52,12 +52,6 @@ public class TourController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    private void saveImageInStatic(TourBindingModel tour) throws IOException {
-        MultipartFile image = tour.getImage();
-        Files.copy(image.getInputStream(),
-                Paths.get("C:\\Users\\user\\Desktop\\travel_agency\\src\\main\\resources\\static\\image",image.getOriginalFilename()));
-    }
-
     @GetMapping("/all")
     public ResponseEntity<TourViewModel[]> getAllTours(){
       TourServiceModel [] tourServiceModels= this.tourService.getAllTours();
@@ -68,6 +62,12 @@ public class TourController {
     public ResponseEntity<TourViewModel> getTour( @PathVariable String id) throws NotFoundException {
         TourServiceModel tourServiceModel= this.tourService.getTourById(id);
         return new ResponseEntity<>(this.modelMapper.map(tourServiceModel,TourViewModel.class),HttpStatus.OK);
+    }
+
+    @GetMapping("/remove/{id}")
+    public ResponseEntity<Void> deleteTour(@PathVariable String id){
+        this.tourService.deleteTour(id);
+        return null;
     }
 
     private TourServiceModel createTourServiceModel(@RequestBody @Valid TourBindingModel tour, CategoryServiceModel categoryServiceModel, UserServiceModel userServiceModel) {
@@ -81,5 +81,11 @@ public class TourController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return this.modelMapper.map(this.userService.loadUserByUsername(username),UserServiceModel.class);
+    }
+
+    private void saveImageInStatic(TourBindingModel tour) throws IOException {
+        MultipartFile image = tour.getImage();
+        Files.copy(image.getInputStream(),
+                Paths.get("C:\\Users\\user\\Desktop\\travel_agency\\src\\main\\resources\\static\\image",image.getOriginalFilename()));
     }
 }

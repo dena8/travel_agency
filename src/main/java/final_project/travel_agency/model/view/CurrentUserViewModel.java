@@ -4,12 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CurrentUserViewModel {
+    private String id;
     private String username;
     private String email;
     private List<TourViewModel> createdTours = new ArrayList<>();
     private List<TourViewModel> cart = new ArrayList<>();
 
     public CurrentUserViewModel() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {

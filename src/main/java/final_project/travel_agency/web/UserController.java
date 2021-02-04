@@ -67,7 +67,6 @@ public class UserController {
     private HttpHeaders createAuthorizationHeader(String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", token);
-        headers.add("ASD", "ASD");
         return headers;
     }
 

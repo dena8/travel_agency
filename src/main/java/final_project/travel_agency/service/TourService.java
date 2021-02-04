@@ -13,4 +13,6 @@ public interface TourService {
     TourServiceModel[] getAllTours();
 
     TourServiceModel getTourById(String id) throws NotFoundException;
+
+    void deleteTour(String id);
 }

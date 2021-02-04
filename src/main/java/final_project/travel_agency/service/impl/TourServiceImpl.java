@@ -35,4 +35,9 @@ public class TourServiceImpl implements TourService {
         Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundException("Tour not found"));
        return this.modelMapper.map(tour,TourServiceModel.class);
     }
+
+    @Override
+    public void deleteTour(String id) {
+        this.tourRepository.deleteById(id);
+    }
 }
