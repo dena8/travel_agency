@@ -2,6 +2,7 @@ package final_project.travel_agency.model.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,6 +19,7 @@ public class Tour extends BaseEntity {
     private Category category;
     private User creator;
     private List<String> photos;
+    private LocalDateTime startedOn;
 
 
 
@@ -121,5 +123,14 @@ public class Tour extends BaseEntity {
 
     public void setPhotos(List<String> photos) {
         this.photos = photos;
+    }
+
+    @Column
+    public LocalDateTime getStartedOn() {
+        return startedOn;
+    }
+
+    public void setStartedOn(LocalDateTime startedOn) {
+        this.startedOn = startedOn;
     }
 }

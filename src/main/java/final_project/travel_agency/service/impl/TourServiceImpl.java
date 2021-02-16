@@ -9,6 +9,8 @@ import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class TourServiceImpl implements TourService {
     private final TourRepository tourRepository;
@@ -40,4 +42,11 @@ public class TourServiceImpl implements TourService {
     public void deleteTour(String id) {
         this.tourRepository.deleteById(id);
     }
+
+    @Override
+    public void deathLineForTourRegistration() {
+        this.tourRepository.stopTourRegistration(LocalDateTime.now());
+    }
+
+
 }

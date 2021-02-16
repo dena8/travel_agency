@@ -9,6 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class TourServiceModel extends BaseServiceModel {
 
@@ -22,6 +23,7 @@ public class TourServiceModel extends BaseServiceModel {
     private Boolean enabled;
     private CategoryServiceModel category;
     private UserServiceModel creator;
+    private LocalDateTime startedOn;
 
     public TourServiceModel() {
     }
@@ -114,5 +116,13 @@ public class TourServiceModel extends BaseServiceModel {
 
     public void setCreator(UserServiceModel creator) {
         this.creator = creator;
+    }
+
+    public LocalDateTime getStartedOn() {
+        return startedOn;
+    }
+
+    public void setStartedOn(LocalDateTime startedOn) {
+        this.startedOn = startedOn;
     }
 }

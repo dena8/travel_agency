@@ -24,6 +24,11 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/tours")
@@ -42,14 +47,27 @@ public class TourController {
 
 
     @PostMapping(value = "/create",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> createTour(@Valid @ModelAttribute("tour") TourBindingModel tour) throws NotFoundException, IOException {
+    public ResponseEntity<Void> createTour(@Valid @ModelAttribute("tour") TourBindingModel tour) throws NotFoundException, IOException, ParseException {
         saveImageInStatic(tour);
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());
         UserServiceModel userServiceModel = getUser();
         TourServiceModel tourServiceModel= createTourServiceModel(tour, categoryServiceModel, userServiceModel);
-        tourServiceModel.setImage("http://localhost:5000/image/"+tour.getImage().getOriginalFilename());
+       tourServiceModel.setImage("http://localhost:5000/image/"+tour.getImage().getOriginalFilename());
+      LocalDateTime startedOn =  getStartedOn(tour.getStartAndEnd());
+      tourServiceModel.setStartedOn(startedOn);
         this.tourService.createTour(tourServiceModel);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    private LocalDateTime getStartedOn(String startAndEnd) {
+        String startDate = startAndEnd.substring(0,startAndEnd.indexOf("-"));
+        DateTimeFormatter dtf = DateTimeFormatter
+                .ofPattern("dd/MM/yy HH:mm:ss");
+//        LocalDateTime asd =  LocalDateTime.parse(startDate+" 00:00:00",dtf);
+//        boolean search = asd.isBefore(asd.minusDays(3));
+//
+//        System.out.println(asd);
+        return LocalDateTime.parse(startDate+" 00:00:00",dtf);
     }
 
     @GetMapping("/all")
