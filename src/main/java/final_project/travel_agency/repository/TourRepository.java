@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -17,11 +18,11 @@ public interface TourRepository extends JpaRepository<Tour,String> {
 
     @Transactional
     @Modifying
-    @Query("update Tour set participants = participants-1 where id=id")
+    @Query("update Tour set participants = participants-1 where ((id=:id) and (participants>0) )")
     void updateParticipants(@Param("id") String id);
 
     @Transactional
     @Modifying
-    @Query("update Tour set participants = 0 where startedOn > :date")
-    void stopTourRegistration(@Param("date")LocalDateTime date);
+    @Query("update Tour set participants = 0 where startDate > :date")
+    void stopTourRegistration(@Param("date") LocalDate date);
 }

@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
 //        System.out.println(col);
        this.userRepository.updateUserCart(user.getId(),tourServiceModel.getId());
        this.tourRepository.updateParticipants(tourServiceModel.getId());
+        System.out.println("ID WHILE UPDATE: "+tourServiceModel.getId());
       //  this.userRepository.updateU(user.getId(),"new@abv.bg");
 
     }

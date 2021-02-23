@@ -27,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void makeOrder(Order order) {
+        System.out.println();
         this.orderRepository.saveAndFlush(order);
     }
 

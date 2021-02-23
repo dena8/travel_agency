@@ -1,7 +1,12 @@
 package final_project.travel_agency.model.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Past;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,7 +15,6 @@ import java.util.List;
 public class Tour extends BaseEntity {
     private String name;
     private String description;
-    private String  startAndEnd;
     private Integer participants;
     private String difficultyLevel;
     private String image;
@@ -19,7 +23,7 @@ public class Tour extends BaseEntity {
     private Category category;
     private User creator;
     private List<String> photos;
-    private LocalDateTime startedOn;
+    private LocalDate startDate;
 
 
 
@@ -44,15 +48,6 @@ public class Tour extends BaseEntity {
         this.description = description;
     }
 
-    @Column
-    public String getStartAndEnd() {
-        return startAndEnd;
-    }
-
-    public void setStartAndEnd(String startAndEnd) {
-        this.startAndEnd = startAndEnd;
-    }
-
     @Column(nullable = false)
     public Integer getParticipants() {
         return participants;
@@ -62,7 +57,7 @@ public class Tour extends BaseEntity {
         this.participants = participants;
     }
 
-    @Column
+    @Column(nullable = false)
     public String getDifficultyLevel() {
         return difficultyLevel;
     }
@@ -72,6 +67,7 @@ public class Tour extends BaseEntity {
     }
 
 
+    @Column(nullable = false)
     public String getImage() {
         return image;
     }
@@ -125,12 +121,14 @@ public class Tour extends BaseEntity {
         this.photos = photos;
     }
 
-    @Column
-    public LocalDateTime getStartedOn() {
-        return startedOn;
+
+    @Column(nullable = false)
+    @Future(message = "Date must be in the future")
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStartedOn(LocalDateTime startedOn) {
-        this.startedOn = startedOn;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 }

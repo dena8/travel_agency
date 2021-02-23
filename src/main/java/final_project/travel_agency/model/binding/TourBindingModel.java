@@ -1,24 +1,24 @@
 package final_project.travel_agency.model.binding;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class TourBindingModel {
     private String name;
     private String description;
-    private String  startAndEnd;
     private Integer participants;
     private String difficultyLevel;
     private MultipartFile image;
     private BigDecimal price;
     private String category;
+    private LocalDate startDate;
 
     public TourBindingModel() {
     }
@@ -43,14 +43,6 @@ public class TourBindingModel {
         this.description = description;
     }
 
-    @Pattern(regexp = "^([0-9]{2}\\/){2}[0-9]{2}-([0-9]{2}\\/){2}[0-9]{2}$")
-    public String getStartAndEnd() {
-        return startAndEnd;
-    }
-
-    public void setStartAndEnd(String startAndEnd) {
-        this.startAndEnd = startAndEnd;
-    }
 
     @NotNull
     @Min(0)
@@ -95,5 +87,15 @@ public class TourBindingModel {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    @DateTimeFormat( iso = DateTimeFormat.ISO.DATE)
+    @Future(message = "Date must be in a future")
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 }

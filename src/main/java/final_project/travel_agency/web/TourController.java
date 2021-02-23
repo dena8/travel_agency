@@ -33,6 +33,7 @@ public class TourController {
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> createTour(@Valid @ModelAttribute("tour") TourBindingModel tour) throws NotFoundException, IOException, ParseException {
+        System.out.println();
         this.tourService.createTour(tour);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

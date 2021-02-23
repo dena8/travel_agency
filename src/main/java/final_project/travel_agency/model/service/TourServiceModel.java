@@ -9,13 +9,13 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class TourServiceModel extends BaseServiceModel {
 
     private String name;
     private String description;
-    private String  startAndEnd;
     private Integer participants;
     private String difficultyLevel;
     private String image;
@@ -23,7 +23,7 @@ public class TourServiceModel extends BaseServiceModel {
     private Boolean enabled;
     private CategoryServiceModel category;
     private UserServiceModel creator;
-    private LocalDateTime startedOn;
+    private LocalDate startDate;
 
     public TourServiceModel() {
     }
@@ -46,15 +46,6 @@ public class TourServiceModel extends BaseServiceModel {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Pattern(regexp = "^([0-9]{2}\\/){2}[0-9]{2}-([0-9]{2}\\/){2}[0-9]{2}$")
-    public String getStartAndEnd() {
-        return startAndEnd;
-    }
-
-    public void setStartAndEnd(String startAndEnd) {
-        this.startAndEnd = startAndEnd;
     }
 
     @NotNull
@@ -118,11 +109,11 @@ public class TourServiceModel extends BaseServiceModel {
         this.creator = creator;
     }
 
-    public LocalDateTime getStartedOn() {
-        return startedOn;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStartedOn(LocalDateTime startedOn) {
-        this.startedOn = startedOn;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 }

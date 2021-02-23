@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -42,14 +43,13 @@ public class TourServiceImpl implements TourService {
     public void createTour(TourBindingModel tour) throws NotFoundException, IOException {
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());
         UserServiceModel userServiceModel = getUser();
-        LocalDateTime startedOn = getStartedOn(tour.getStartAndEnd());
 
         TourServiceModel tourServiceModel = this.modelMapper.map(tour,TourServiceModel.class);
 
         tourServiceModel.setCreator(userServiceModel);
         tourServiceModel.setCategory(categoryServiceModel);
         tourServiceModel.setImage(this.cloudinaryService.uploadImage(tour.getImage()));
-        tourServiceModel.setStartedOn(startedOn);
+        Tour tour1 = this.modelMapper.map(tourServiceModel, Tour.class);
 
         this.tourRepository.saveAndFlush(this.modelMapper.map(tourServiceModel, Tour.class));
     }
@@ -72,7 +72,8 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public void deathLineForTourRegistration() {
-        this.tourRepository.stopTourRegistration(LocalDateTime.now());
+
+        this.tourRepository.stopTourRegistration(LocalDate.now());
     }
 
 

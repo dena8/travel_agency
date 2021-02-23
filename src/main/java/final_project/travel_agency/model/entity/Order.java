@@ -1,27 +1,30 @@
 package final_project.travel_agency.model.entity;
 
 import javax.persistence.*;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity {
-    private LocalDateTime buyDate = LocalDateTime.now();
+    private Instant buyDate;
     private User customer;
     private List<Tour> buyingProducts= new ArrayList<>();
     private Boolean isConfirm =false;
 
 
     public Order() {
+       this.buyDate = Instant.now();
     }
 
-    @Column(columnDefinition = "boolean default false")
-    public LocalDateTime getBuyDate() {
+    @Column
+    public Instant getBuyDate() {
         return buyDate;
     }
 
-    public void setBuyDate(LocalDateTime buyDate) {
+    public void setBuyDate(Instant buyDate) {
         this.buyDate = buyDate;
     }
 

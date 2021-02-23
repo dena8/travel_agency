@@ -18,7 +18,7 @@ public class Schedule {
         this.tourService = tourService;
     }
 
-    @Scheduled(fixedRate =60*60*1000 )
+  //  @Scheduled(fixedRate =60*60*1000 )
     public void doSomething(){
         this.tourService.deathLineForTourRegistration();
         System.out.println("At 01:00:00am every day");

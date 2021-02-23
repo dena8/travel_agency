@@ -1,12 +1,12 @@
 package final_project.travel_agency.model.service;
 
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderServiceModel extends BaseServiceModel {
     private String id;
-    private LocalDateTime buyDate = LocalDateTime.now();
+
     private UserServiceModel customer;
     private List<TourServiceModel> buyingProducts= new ArrayList<>();
 
@@ -21,14 +21,6 @@ public class OrderServiceModel extends BaseServiceModel {
     @Override
     public void setId(String id) {
         this.id = id;
-    }
-
-    public LocalDateTime getBuyDate() {
-        return buyDate;
-    }
-
-    public void setBuyDate(LocalDateTime buyDate) {
-        this.buyDate = buyDate;
     }
 
     public UserServiceModel getCustomer() {

@@ -5,11 +5,11 @@ package final_project.travel_agency.model.view;
 import final_project.travel_agency.model.service.BaseServiceModel;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class TourViewModel extends BaseServiceModel {
     private String name;
     private String description;
-    private String  startAndEnd;
     private Integer participants;
     private String difficultyLevel;
     private String image;
@@ -17,6 +17,7 @@ public class TourViewModel extends BaseServiceModel {
     private Boolean enabled;
     private CategoryViewModel category;
     private UserViewModel creator;
+    private LocalDate startDate;
 
     public TourViewModel() {
     }
@@ -35,14 +36,6 @@ public class TourViewModel extends BaseServiceModel {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getStartAndEnd() {
-        return startAndEnd;
-    }
-
-    public void setStartAndEnd(String startAndEnd) {
-        this.startAndEnd = startAndEnd;
     }
 
     public Integer getParticipants() {
@@ -99,5 +92,13 @@ public class TourViewModel extends BaseServiceModel {
 
     public void setCreator(UserViewModel creator) {
         this.creator = creator;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 }

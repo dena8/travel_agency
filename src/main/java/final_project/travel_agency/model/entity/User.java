@@ -86,7 +86,7 @@ public class User extends BaseEntity implements UserDetails {
         this.authorities = authorities;
     }
 
-    @ManyToMany
+    @OneToMany
     public List<Tour> getCreatedTours() {
         return createdTours;
     }
