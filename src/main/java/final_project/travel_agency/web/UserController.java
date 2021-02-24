@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -56,7 +54,7 @@ public class UserController {
 
     @GetMapping("/get/current")
     public ResponseEntity<CurrentUserViewModel> getCurrentUser(){
-       CurrentUserViewModel user = this.modelMapper.map(getUser(),CurrentUserViewModel.class);
+       CurrentUserViewModel user = this.modelMapper.map(this.userService.getAuthenticatedUser(),CurrentUserViewModel.class);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
@@ -66,9 +64,5 @@ public class UserController {
         return headers;
     }
 
-    private UserServiceModel getUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return this.modelMapper.map(this.userService.loadUserByUsername(username), UserServiceModel.class);
-    }
+
 }

@@ -3,11 +3,15 @@ package final_project.travel_agency.service.impl;
 import final_project.travel_agency.model.entity.Order;
 import final_project.travel_agency.model.entity.User;
 import final_project.travel_agency.model.service.OrderServiceModel;
+import final_project.travel_agency.model.service.TourServiceModel;
+import final_project.travel_agency.model.service.UserServiceModel;
 import final_project.travel_agency.repository.OrderRepository;
 import final_project.travel_agency.repository.UserRepository;
 import final_project.travel_agency.service.OrderService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,5 +52,20 @@ public class OrderServiceImpl implements OrderService {
         Order order = this.orderRepository.findById(id).orElseThrow(()->new NoSuchElementException("Order not found"));
         System.out.println();
         return this.modelMapper.map(order,OrderServiceModel.class);
+    }
+
+    @Override
+    public boolean checkIfTourIsAdded(UserServiceModel authUser,String id) {
+        List<OrderServiceModel> orders = authUser.getOrders();
+        for (OrderServiceModel order : orders) {
+            int count = (int) order.getBuyingProducts().stream().filter(b -> b.getId().equals(id)).count();
+            if (count > 0) {
+                return true;
+            }
+        }
+
+        TourServiceModel findT = authUser.getCart().stream().filter(t -> t.getId().equals(id)).findFirst()
+                .orElse(null);
+        return findT != null;
     }
 }

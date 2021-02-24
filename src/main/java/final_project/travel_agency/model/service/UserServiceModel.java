@@ -1,6 +1,7 @@
 package final_project.travel_agency.model.service;
 
 import final_project.travel_agency.model.entity.Authority;
+import final_project.travel_agency.model.entity.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public class UserServiceModel extends BaseServiceModel {
     private List<AuthorityServiceModel> authorities;
     private List<TourServiceModel> createdTours;
     private List<TourServiceModel> cart = new ArrayList<>();
+    private List<OrderServiceModel> orders = new ArrayList<>();
 
 
     public UserServiceModel() {
@@ -64,5 +66,13 @@ public class UserServiceModel extends BaseServiceModel {
 
     public void setCart(List<TourServiceModel> cart) {
         this.cart = cart;
+    }
+
+    public List<OrderServiceModel> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderServiceModel> orders) {
+        this.orders = orders;
     }
 }

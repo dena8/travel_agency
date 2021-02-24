@@ -1,6 +1,4 @@
 package final_project.travel_agency.service.impl;
-
-
 import final_project.travel_agency.model.entity.Authority;
 import final_project.travel_agency.model.entity.User;
 import final_project.travel_agency.model.service.TourServiceModel;
@@ -10,6 +8,8 @@ import final_project.travel_agency.repository.TourRepository;
 import final_project.travel_agency.repository.UserRepository;
 import final_project.travel_agency.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void register(UserServiceModel userService) {
 
-        Authority authority = this.authorityRepository.findByAuthority(this.userRepository.count()<1?"ADMIN_ROLE":"USER_ROLE")
+        Authority authority = this.authorityRepository.findByAuthority(this.userRepository.count()<1?"GUIDE_ROLE":"USER_ROLE")
                 .orElse(null);
 //        Authority guide = this.authorityRepository.findByAuthority("GUIDE_ROLE")
 //                .orElse(null);
@@ -54,28 +54,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addTourToCart(User user, TourServiceModel tourServiceModel) {
-//       Tour tour = this.modelMapper.map(tourServiceModel,Tour.class);
-//       List<Tour> cart =  user.getCart();
-//       List<String> col = new ArrayList<>();
-//       col.add(tour.getId());
-//       cart.add(tour);
-//        System.out.println(user.getId());
-//        System.out.println(col);
        this.userRepository.updateUserCart(user.getId(),tourServiceModel.getId());
        this.tourRepository.updateParticipants(tourServiceModel.getId());
         System.out.println("ID WHILE UPDATE: "+tourServiceModel.getId());
       //  this.userRepository.updateU(user.getId(),"new@abv.bg");
-
     }
 
+    @Override
+    public UserServiceModel getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = this.userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("No such user exist"));
+        return this.modelMapper.map(user, UserServiceModel.class);
+    }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("No such user exist"));
-        if(user == null) throw new UsernameNotFoundException("User is not exit!");
-        return user;
-
+        return this.userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("No such user exist"));
 
         /*User user=   this.userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("No such user exist"));
         List<GrantedAuthority> roles = user.getAuthorities()

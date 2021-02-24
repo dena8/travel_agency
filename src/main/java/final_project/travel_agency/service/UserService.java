@@ -12,8 +12,9 @@ public interface UserService extends UserDetailsService {
 
     void register(UserServiceModel userService);
 
-
     void addTourToCart(User user, TourServiceModel tourServiceModel);
+
+    UserServiceModel getAuthenticatedUser();
 
 
 }

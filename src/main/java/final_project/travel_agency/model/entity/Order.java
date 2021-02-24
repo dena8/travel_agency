@@ -28,7 +28,7 @@ public class Order extends BaseEntity {
         this.buyDate = buyDate;
     }
 
-    @ManyToOne
+    @ManyToOne(targetEntity = User.class)
     public User getCustomer() {
         return customer;
     }

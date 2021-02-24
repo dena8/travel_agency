@@ -25,4 +25,5 @@ public interface TourRepository extends JpaRepository<Tour,String> {
     @Modifying
     @Query("update Tour set participants = 0 where startDate > :date")
     void stopTourRegistration(@Param("date") LocalDate date);
+
 }

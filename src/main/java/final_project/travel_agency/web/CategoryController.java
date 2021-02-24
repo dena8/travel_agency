@@ -1,6 +1,4 @@
 package final_project.travel_agency.web;
-
-
 import final_project.travel_agency.model.binding.CategoryBindingModel;
 import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.service.CategoryServiceModel;
@@ -11,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;

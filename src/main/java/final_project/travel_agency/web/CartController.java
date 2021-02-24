@@ -1,14 +1,10 @@
 package final_project.travel_agency.web;
-
 import final_project.travel_agency.model.binding.UserBindingModel;
-
 import final_project.travel_agency.model.entity.Order;
 import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.entity.User;
 import final_project.travel_agency.model.service.TourServiceModel;
 import final_project.travel_agency.model.service.UserServiceModel;
-
-import final_project.travel_agency.repository.OrderRepository;
 import final_project.travel_agency.service.OrderService;
 import final_project.travel_agency.service.TourService;
 import final_project.travel_agency.service.UserService;
@@ -20,10 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/cart")
@@ -32,14 +26,13 @@ public class CartController {
     private final TourService tourService;
     private final UserService userService;
     private final OrderService orderService;
-    private final OrderRepository orderRepository;
 
-    public CartController(ModelMapper modelMapper, TourService tourService, UserService userService, OrderService orderService, OrderRepository orderRepository) {
+
+    public CartController(ModelMapper modelMapper, TourService tourService, UserService userService, OrderService orderService) {
         this.modelMapper = modelMapper;
         this.tourService = tourService;
         this.userService = userService;
         this.orderService = orderService;
-        this.orderRepository = orderRepository;
     }
 
     @GetMapping("/add/{id}")
@@ -54,14 +47,12 @@ public class CartController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-   // @PreAuthorize("hasAuthority('USER_ROLE')")
+    // @PreAuthorize("hasAuthority('USER_ROLE')")
     //@PreAuthorize("hasAnyAuthority('USER_ROLE','GUIDE_ROLE','ADMIN_ROLE')")
     @GetMapping("/contain/{id}")
     public ResponseEntity<Boolean> checkIfTourIsAdded(@PathVariable String id) throws NotFoundException {
-        User user = this.modelMapper.map(getUser(), User.class);
-        Tour findT = user.getCart().stream().filter(t -> t.getId().equals(id)).findFirst()
-                .orElse(null);
-        boolean body = findT != null;
+        UserServiceModel authUser = this.userService.getAuthenticatedUser();
+        boolean body = this.orderService.checkIfTourIsAdded(authUser,id);
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
