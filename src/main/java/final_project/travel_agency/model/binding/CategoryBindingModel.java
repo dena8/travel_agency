@@ -7,13 +7,11 @@ import javax.validation.constraints.NotBlank;
 
 public class CategoryBindingModel {
     private String name;
-    private MultipartFile image;
-
 
     public CategoryBindingModel() {
     }
 
-    @NotBlank
+   // @NotBlank(message = "Category name is required")
     @Length(min = 3, max = 20, message = "Category name must contain between 3 and 20 letters")
     public String getName() {
         return name;
@@ -23,11 +21,4 @@ public class CategoryBindingModel {
         this.name = name;
     }
 
-    public MultipartFile getImage() {
-        return image;
-    }
-
-    public void setImage(MultipartFile image) {
-        this.image = image;
-    }
 }

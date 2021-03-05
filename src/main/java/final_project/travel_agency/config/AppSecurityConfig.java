@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
-//@EnableWebSecurity()
+@EnableWebSecurity()
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -36,7 +36,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     public AppSecurityConfig(PasswordEncoder bcrypt, UserService userService, JwtAuthorizationFilter jwtAuthorizationFilter) {
         this.bcrypt = bcrypt;
         this.userService = userService;
-
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
     }
 
@@ -55,7 +54,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/users/*").permitAll()
                 .antMatchers("/image/**").permitAll()
                 .antMatchers("/tours/all").permitAll()
-                .antMatchers("/categories/create","/tours/create").hasAuthority("GUIDE_ROLE")
+                .antMatchers("/categories/create","/tours/create","/categories/asd").permitAll() //.hasAuthority("GUIDE_ROLE")
                 .antMatchers("/cart/**").hasAuthority("USER_ROLE")
                 .anyRequest().authenticated()
                 .and()

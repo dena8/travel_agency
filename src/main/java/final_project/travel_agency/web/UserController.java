@@ -48,6 +48,7 @@ public class UserController {
     public ResponseEntity<String> postLogin(@RequestBody UserRegisterBindingModel userRegisterBindingModel) throws Exception {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRegisterBindingModel.getUsername(),userRegisterBindingModel.getPassword()));
         String token = this.jwtUtil.generateToken(this.userService.loadUserByUsername(userRegisterBindingModel.getUsername()));
+        System.out.println("Bearer "+ token);
         HttpHeaders headers = createAuthorizationHeader(token);
         return new ResponseEntity<>(gson.toJson("Successful login"),headers, HttpStatus.OK);
     }
@@ -57,6 +58,8 @@ public class UserController {
        CurrentUserViewModel user = this.modelMapper.map(this.userService.getAuthenticatedUser(),CurrentUserViewModel.class);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
+
+
 
     private HttpHeaders createAuthorizationHeader(String token) {
         HttpHeaders headers = new HttpHeaders();

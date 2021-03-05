@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class TourBindingModel {
     private String name;
     private String description;
+    private String region;
     private Integer participants;
     private String difficultyLevel;
     private MultipartFile image;
@@ -33,7 +34,7 @@ public class TourBindingModel {
         this.name = name;
     }
 
-    @NotNull
+    @NotNull(message = "Description is required")
     @Length(min = 3,max = 200, message = "Tour name must contain between 3 and 200 letters")
     public String getDescription() {
         return description;
@@ -43,6 +44,15 @@ public class TourBindingModel {
         this.description = description;
     }
 
+    @NotNull(message = "Region is required")
+    @Length(min = 3,max = 200, message = "Tour name must contain between 2 and 200 letters")
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
 
     @NotNull
     @Min(0)

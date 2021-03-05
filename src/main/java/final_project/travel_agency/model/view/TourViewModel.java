@@ -18,6 +18,7 @@ public class TourViewModel extends BaseServiceModel {
     private CategoryViewModel category;
     private UserViewModel creator;
     private LocalDate startDate;
+    private String region;
 
     public TourViewModel() {
     }
@@ -100,5 +101,13 @@ public class TourViewModel extends BaseServiceModel {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 }

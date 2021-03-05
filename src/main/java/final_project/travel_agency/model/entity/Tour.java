@@ -15,6 +15,7 @@ import java.util.List;
 public class Tour extends BaseEntity {
     private String name;
     private String description;
+    private String region;
     private Integer participants;
     private String difficultyLevel;
     private String image;
@@ -24,6 +25,7 @@ public class Tour extends BaseEntity {
     private User creator;
     private List<String> photos;
     private LocalDate startDate;
+
 
 
 
@@ -46,6 +48,15 @@ public class Tour extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Column(nullable = false)
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     @Column(nullable = false)
