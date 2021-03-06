@@ -20,7 +20,7 @@ public class Tour extends BaseEntity {
     private String difficultyLevel;
     private String image;
     private BigDecimal price;
-    private Boolean enabled = false;
+    private Boolean enabled =true;
     private Category category;
     private User creator;
     private List<String> photos;
@@ -30,6 +30,7 @@ public class Tour extends BaseEntity {
 
 
     public Tour() {
+
     }
 
     @Column(nullable = false)
@@ -96,7 +97,7 @@ public class Tour extends BaseEntity {
         this.price = price;
     }
 
-    @Column(columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default true")
     public Boolean getEnabled() {
         return enabled;
     }

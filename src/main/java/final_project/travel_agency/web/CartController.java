@@ -67,6 +67,7 @@ public class CartController {
         User user = (User) this.userService.loadUserByUsername(userBindingModel.getUsername());
         Order order = createOrder(user);
         this.orderService.makeOrder(order);
+        this.orderService.emptiedCard(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -75,8 +76,14 @@ public class CartController {
         Order order = new Order();
         order.setBuyingProducts(cart);
         order.setCustomer(user);
-        this.orderService.emptiedCard(user);
         return order;
+    }
+
+    @PutMapping("/remove-item")
+    public ResponseEntity<Void> removeFromCart(@RequestParam("userId") String id, @RequestParam("tourId") String tourId) throws NotFoundException {
+        this.userService.removeItemFromCart(id,tourId);
+        this.tourService.resetParticipants(tourId);
+        return ResponseEntity.ok().build();
     }
 
 

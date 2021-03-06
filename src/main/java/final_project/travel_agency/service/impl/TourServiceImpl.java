@@ -13,7 +13,6 @@ import final_project.travel_agency.service.TourService;
 import final_project.travel_agency.service.UserService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 
 @Service
 public class TourServiceImpl implements TourService {
@@ -45,11 +45,12 @@ public class TourServiceImpl implements TourService {
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());
         UserServiceModel userServiceModel = getUser();
 
-        TourServiceModel tourServiceModel = this.modelMapper.map(tour,TourServiceModel.class);
+        TourServiceModel tourServiceModel = this.modelMapper.map(tour, TourServiceModel.class);
 
         tourServiceModel.setCreator(userServiceModel);
         tourServiceModel.setCategory(categoryServiceModel);
         tourServiceModel.setImage(this.cloudinaryService.uploadImage(tour.getImage()));
+        tourServiceModel.setEnabled(true);
         Tour tour1 = this.modelMapper.map(tourServiceModel, Tour.class);
 
         this.tourRepository.saveAndFlush(this.modelMapper.map(tourServiceModel, Tour.class));
@@ -57,24 +58,35 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public TourServiceModel[] getAllTours() {
-        return this.modelMapper.map(this.tourRepository.findAll(),TourServiceModel[].class);
+      return this.modelMapper.map(this.tourRepository.findAllEnabledTours(), TourServiceModel[].class);
     }
 
     @Override
     public TourServiceModel getTourById(String id) throws NotFoundException {
         Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundException("Tour not found"));
-       return this.modelMapper.map(tour,TourServiceModel.class);
+        return this.modelMapper.map(tour, TourServiceModel.class);
     }
 
     @Override
-    public void deleteTour(String id) {
-        this.tourRepository.deleteById(id);
+    public void deleteTour(String id) throws NotFoundException {
+        Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundException("Tour not found"));
+        tour.setEnabled(false);
+        this.tourRepository.saveAndFlush(tour);
     }
 
     @Override
     public void deathLineForTourRegistration() {
-
         this.tourRepository.stopTourRegistration(LocalDate.now());
+    }
+
+    @Override
+    public void updateParticipants(String id) {
+        this.tourRepository.updateParticipants(id);
+    }
+
+    @Override
+    public void resetParticipants(String tourId) {
+        this.tourRepository.resetParticipants(tourId);
     }
 
 

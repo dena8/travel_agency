@@ -23,6 +23,8 @@ public interface UserRepository extends JpaRepository<User, String> {
             " VALUES(?1,?2)", nativeQuery = true)
     Integer updateUserCart(String userId, String tourId);
 
+    Optional<User> findById(String id);
+
 //    @Transactional
 //    @Modifying
 //    @Query("update User as u set u.cart= :cart where u.username = :username")

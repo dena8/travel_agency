@@ -62,12 +62,12 @@ public class TourController {
     }
 
     @GetMapping("/remove/{id}")
-    public ResponseEntity<Void> deleteTour(@PathVariable String id) {
+    public ResponseEntity<Void> deleteTour(@PathVariable String id) throws NotFoundException {
         this.tourService.deleteTour(id);
-        return null;
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("weather-forecast")
+    @GetMapping("weather-forecasttt")
     public ResponseEntity<WeatherDtoModel> getWeather(@RequestParam String region)  {
         String weatherAsString = restTemplate.getForObject("http://api.weatherstack.com/current?access_key=8dfb900cd87a27bee8fff4d7f0425a55&query="+region, String.class);
         WeatherDtoModel weather = this.gson.fromJson(weatherAsString,WeatherDtoModel.class);

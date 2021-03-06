@@ -3,6 +3,7 @@ package final_project.travel_agency.config;
 import final_project.travel_agency.service.UserService;
 import final_project.travel_agency.util.filter.JwtAuthorizationFilter;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -51,8 +52,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+               // .antMatchers(String.valueOf(PathRequest.toStaticResources().atCommonLocations())).permitAll()
                 .antMatchers(HttpMethod.POST,"/users/*").permitAll()
-                .antMatchers("/image/**").permitAll()
+                .antMatchers("/images/**").permitAll()
                 .antMatchers("/tours/all").permitAll()
                 .antMatchers("/categories/create","/tours/create","/categories/asd").permitAll() //.hasAuthority("GUIDE_ROLE")
                 .antMatchers("/cart/**").hasAuthority("USER_ROLE")

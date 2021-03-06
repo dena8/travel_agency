@@ -44,7 +44,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderServiceModel> getAllOrders() {
-        return List.of( this.modelMapper.map(this.orderRepository.findAll(),OrderServiceModel[].class));
+//        Order[]orders = this.orderRepository.findAllByOrderByBuyDateAsc();
+//        System.out.println();
+        return List.of( this.modelMapper.map(this.orderRepository.findAllByOrderByBuyDateAsc(),OrderServiceModel[].class));
     }
 
     @Override

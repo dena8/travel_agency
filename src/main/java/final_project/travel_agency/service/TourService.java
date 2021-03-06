@@ -16,7 +16,11 @@ public interface TourService {
 
     TourServiceModel getTourById(String id) throws NotFoundException;
 
-    void deleteTour(String id);
+    void deleteTour(String id) throws NotFoundException;
 
-    void deathLineForTourRegistration();
+    void deathLineForTourRegistration(); 
+
+    void updateParticipants(String id);
+
+    void resetParticipants(String tourId);
 }
