@@ -1,6 +1,7 @@
 package final_project.travel_agency.service.impl;
 
 
+import final_project.travel_agency.exception.NotFoundEx;
 import final_project.travel_agency.model.binding.TourBindingModel;
 import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.service.CategoryServiceModel;
@@ -63,13 +64,13 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public TourServiceModel getTourById(String id) throws NotFoundException {
-        Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundException("Tour not found"));
+        Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundEx("Tour not found"));
         return this.modelMapper.map(tour, TourServiceModel.class);
     }
 
     @Override
     public void deleteTour(String id) throws NotFoundException {
-        Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundException("Tour not found"));
+        Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundEx("Tour not found"));
         tour.setEnabled(false);
         this.tourRepository.saveAndFlush(tour);
     }

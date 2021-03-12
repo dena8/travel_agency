@@ -55,7 +55,7 @@ public class TourBindingModel {
     }
 
     @NotNull
-    @Min(0)
+    @Min(value = 0, message = "Number participants must be greater than 0")
     public Integer getParticipants() {
         return participants;
     }

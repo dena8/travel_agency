@@ -1,6 +1,7 @@
 package final_project.travel_agency.web;
 
 import com.google.gson.Gson;
+import final_project.travel_agency.model.binding.UserBindingModel;
 import final_project.travel_agency.model.binding.UserRegisterBindingModel;
 import final_project.travel_agency.model.service.UserServiceModel;
 import final_project.travel_agency.model.view.CurrentUserViewModel;
@@ -11,11 +12,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Enumeration;
 
 @RestController
 @RequestMapping("/users")
@@ -45,14 +51,22 @@ public class UserController {
 
     @PostMapping(value = "/login")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<String> postLogin(@RequestBody UserRegisterBindingModel userRegisterBindingModel) throws Exception {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRegisterBindingModel.getUsername(),userRegisterBindingModel.getPassword()));
-        String token = this.jwtUtil.generateToken(this.userService.loadUserByUsername(userRegisterBindingModel.getUsername()));
-        System.out.println("Bearer "+ token);
-        HttpHeaders headers = createAuthorizationHeader(token);
-        return new ResponseEntity<>(gson.toJson("Successful login"),headers, HttpStatus.OK);
+    public ResponseEntity<UserViewModel> postLogin(@RequestBody UserRegisterBindingModel userRegisterBindingModel) throws Exception {
+
+
+           authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRegisterBindingModel.getUsername(), userRegisterBindingModel.getPassword()));
+            String token = this.jwtUtil.generateToken(this.userService.loadUserByUsername(userRegisterBindingModel.getUsername()));
+            System.out.println("Bearer " + token);
+           HttpHeaders headers = createAuthorizationHeader(token);
+           UserViewModel user = new UserViewModel();
+           user.setUsername(userRegisterBindingModel.getUsername());
+
+            return new ResponseEntity<>(user,headers, HttpStatus.OK);
+
+
     }
 
+    @PreAuthorize("hasAuthority('USER_ROLE')")
     @GetMapping("/get/current")
     public ResponseEntity<CurrentUserViewModel> getCurrentUser(){
        CurrentUserViewModel user = this.modelMapper.map(this.userService.getAuthenticatedUser(),CurrentUserViewModel.class);
@@ -66,6 +80,5 @@ public class UserController {
         headers.add("Authorization", token);
         return headers;
     }
-
 
 }

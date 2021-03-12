@@ -1,6 +1,6 @@
 package final_project.travel_agency.service.impl;
 
-import final_project.travel_agency.exception.CategoryNotFound;
+import final_project.travel_agency.exception.NotFoundEx;
 import final_project.travel_agency.model.binding.CategoryBindingModel;
 import final_project.travel_agency.model.entity.Category;
 import final_project.travel_agency.model.service.CategoryServiceModel;
@@ -9,6 +9,7 @@ import final_project.travel_agency.service.CategoryService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,22 +29,21 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryServiceModel> getAllCategories() {
         return this.categoryRepository.findAll()
                 .stream()
-                .map(c->this.modelMapper.map(c,CategoryServiceModel.class))
+                .map(c -> this.modelMapper.map(c, CategoryServiceModel.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public CategoryServiceModel getCategoryByName(String name) throws NotFoundException {
-        Category category= this.categoryRepository.findByName(name)
-               // .orElseThrow(() -> new NotFoundException("Category not found"));
-        .orElseThrow(()-> new CategoryNotFound("Category not found"));
-        return this.modelMapper.map(category,CategoryServiceModel.class);
+        Category category = this.categoryRepository.findByName(name)
+                .orElseThrow(() -> new NotFoundEx("Category not found"));
+        return this.modelMapper.map(category, CategoryServiceModel.class);
     }
 
     @Override
     public void createCategory(CategoryBindingModel categoryBindingModel) {
-        CategoryServiceModel categoryServiceModel = this.modelMapper.map(categoryBindingModel,CategoryServiceModel.class);
-        this.categoryRepository.saveAndFlush(this.modelMapper.map(categoryServiceModel,Category.class));
+        CategoryServiceModel categoryServiceModel = this.modelMapper.map(categoryBindingModel, CategoryServiceModel.class);
+        this.categoryRepository.saveAndFlush(this.modelMapper.map(categoryServiceModel, Category.class));
     }
 
 

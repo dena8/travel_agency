@@ -8,7 +8,7 @@ public class CategoryServiceModel extends BaseServiceModel {
     public CategoryServiceModel() {
     }
 
-    @Length(min = 3, max = 20, message = "Category name must contain between 3 and 20 letters")
+   // @Length(min = 3, max = 20, message = "Category name must contain between 3 and 20 letters")
     public String getName() {
         return name;
     }

@@ -1,5 +1,7 @@
 package final_project.travel_agency.model.entity;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -16,6 +18,7 @@ public class Category extends BaseEntity {
     }
 
     @Column(nullable = false)
+    @Length(min = 3, max = 20, message = "Category name must contain between 3 and 20 letters")
     public String getName() {
         return name;
     }

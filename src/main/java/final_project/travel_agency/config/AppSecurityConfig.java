@@ -4,6 +4,7 @@ import final_project.travel_agency.service.UserService;
 import final_project.travel_agency.util.filter.JwtAuthorizationFilter;
 
 
+import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -52,12 +53,12 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-               // .antMatchers(String.valueOf(PathRequest.toStaticResources().atCommonLocations())).permitAll()
-                .antMatchers(HttpMethod.POST,"/users/*").permitAll()
-                .antMatchers("/images/**").permitAll()
+                .antMatchers(String.valueOf(PathRequest.toStaticResources().atCommonLocations())).permitAll()
+                .antMatchers("/users/*").permitAll()
                 .antMatchers("/tours/all").permitAll()
-                .antMatchers("/categories/create","/tours/create","/categories/asd").permitAll() //.hasAuthority("GUIDE_ROLE")
+                .antMatchers("/categories/*").hasAuthority("GUIDE_ROLE")
                 .antMatchers("/cart/**").hasAuthority("USER_ROLE")
+                .antMatchers("/orders/**").hasAuthority("ADMIN_ROLE")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore( jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);

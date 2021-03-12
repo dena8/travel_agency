@@ -1,6 +1,4 @@
 package final_project.travel_agency.model.entity;
-
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;

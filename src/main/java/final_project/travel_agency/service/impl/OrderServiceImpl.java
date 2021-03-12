@@ -1,5 +1,5 @@
 package final_project.travel_agency.service.impl;
-
+import final_project.travel_agency.exception.NotFoundEx;
 import final_project.travel_agency.model.entity.Order;
 import final_project.travel_agency.model.entity.User;
 import final_project.travel_agency.model.service.OrderServiceModel;
@@ -10,10 +10,7 @@ import final_project.travel_agency.repository.UserRepository;
 import final_project.travel_agency.service.OrderService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -37,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void emptiedCard(User currentUser) throws NotFoundException {
-      User user=  this.userRepository.findByUsername(currentUser.getUsername()).orElseThrow(()-> new NotFoundException("no such user"));
+      User user=  this.userRepository.findByUsername(currentUser.getUsername()).orElseThrow(()-> new NotFoundEx("User not found"));
       user.getCart().clear();
       userRepository.saveAndFlush(user);
     }

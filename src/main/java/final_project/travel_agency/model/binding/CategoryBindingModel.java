@@ -11,7 +11,7 @@ public class CategoryBindingModel {
     public CategoryBindingModel() {
     }
 
-   // @NotBlank(message = "Category name is required")
+    @NotBlank(message = "Category name is required")
     @Length(min = 3, max = 20, message = "Category name must contain between 3 and 20 letters")
     public String getName() {
         return name;

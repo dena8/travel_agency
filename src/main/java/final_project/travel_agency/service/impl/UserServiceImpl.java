@@ -1,5 +1,6 @@
 package final_project.travel_agency.service.impl;
 
+import final_project.travel_agency.exception.NotFoundEx;
 import final_project.travel_agency.model.entity.Authority;
 import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.entity.User;
@@ -82,9 +83,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeItemFromCart(String id, String tourId) throws NotFoundException {
-        User userEntity = this.userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
-        Tour tour = this.tourRepository.findById(tourId).orElseThrow(() -> new NotFoundException("Tour not found"));
+    public void removeItemFromCart(String id, String tourId)  {
+        User userEntity = this.userRepository.findById(id).orElseThrow(() -> new NotFoundEx("User not found"));
+        Tour tour = this.tourRepository.findById(tourId).orElseThrow(() -> new NotFoundEx("Tour not found"));
         List<Tour> cart = userEntity.getCart();
         cart.remove(tour);
         userEntity.setCart(cart);
@@ -93,8 +94,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No such user exist"));
+    public UserDetails loadUserByUsername(String username)  {
+        return this.userRepository.findByUsername(username).orElseThrow(() -> new NotFoundEx("No such user exist"));
     }
 
 

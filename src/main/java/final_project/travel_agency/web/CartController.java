@@ -12,11 +12,7 @@ import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,24 +38,17 @@ public class CartController {
         if (tourServiceModel.getParticipants() < 1) {
             throw new Exception("No vacant places");
         }
-        User user = this.modelMapper.map(getUser(), User.class);
+        User user = this.modelMapper.map(this.userService.getAuthenticatedUser(), User.class);
         this.userService.addTourToCart(user, tourServiceModel);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // @PreAuthorize("hasAuthority('USER_ROLE')")
-    //@PreAuthorize("hasAnyAuthority('USER_ROLE','GUIDE_ROLE','ADMIN_ROLE')")
+
     @GetMapping("/contain/{id}")
     public ResponseEntity<Boolean> checkIfTourIsAdded(@PathVariable String id) throws NotFoundException {
         UserServiceModel authUser = this.userService.getAuthenticatedUser();
         boolean body = this.orderService.checkIfTourIsAdded(authUser,id);
         return new ResponseEntity<>(body, HttpStatus.OK);
-    }
-
-    private UserServiceModel getUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return this.modelMapper.map(this.userService.loadUserByUsername(username), UserServiceModel.class);
     }
 
     @PostMapping("/order")
@@ -85,6 +74,5 @@ public class CartController {
         this.tourService.resetParticipants(tourId);
         return ResponseEntity.ok().build();
     }
-
 
 }
