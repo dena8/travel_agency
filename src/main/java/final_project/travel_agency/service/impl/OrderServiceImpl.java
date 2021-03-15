@@ -1,4 +1,5 @@
 package final_project.travel_agency.service.impl;
+import final_project.travel_agency.event.OrderEventPublisher;
 import final_project.travel_agency.exception.NotFoundEx;
 import final_project.travel_agency.model.entity.Order;
 import final_project.travel_agency.model.entity.User;
@@ -19,17 +20,20 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final OrderEventPublisher orderPublisher;
 
-    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, ModelMapper modelMapper, OrderEventPublisher orderPublisher) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.orderPublisher = orderPublisher;
     }
 
     @Override
     public void makeOrder(Order order) {
         System.out.println();
-        this.orderRepository.saveAndFlush(order);
+      Order newOrder =  this.orderRepository.saveAndFlush(order);
+      this.orderPublisher.publishEvent(newOrder.getId());
     }
 
     @Override
