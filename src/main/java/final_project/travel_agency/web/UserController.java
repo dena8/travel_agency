@@ -1,7 +1,6 @@
 package final_project.travel_agency.web;
 
 import com.google.gson.Gson;
-import final_project.travel_agency.model.binding.UserBindingModel;
 import final_project.travel_agency.model.binding.UserRegisterBindingModel;
 import final_project.travel_agency.model.service.UserServiceModel;
 import final_project.travel_agency.model.view.CurrentUserViewModel;
@@ -15,13 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Enumeration;
+
 
 @RestController
 @RequestMapping("/users")

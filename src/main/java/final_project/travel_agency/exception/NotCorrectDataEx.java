@@ -5,13 +5,6 @@ import java.util.List;
 public class NotCorrectDataEx extends Exception {
     private List<String>validationList;
 
-    public NotCorrectDataEx(String message) {
-        super(message);
-    }
-
-    public NotCorrectDataEx() {
-    }
-
     public NotCorrectDataEx(String message, List<String>validationList ) {
         super(message);
         this.validationList=validationList;

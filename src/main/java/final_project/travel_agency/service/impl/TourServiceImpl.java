@@ -44,7 +44,8 @@ public class TourServiceImpl implements TourService {
     @Override
     public void createTour(TourBindingModel tour) throws NotFoundException, IOException {
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());
-        UserServiceModel userServiceModel = getUser();
+       // UserServiceModel userServiceModel = getUser();
+        UserServiceModel userServiceModel = this.userService.getAuthenticatedUser();
 
         TourServiceModel tourServiceModel = this.modelMapper.map(tour, TourServiceModel.class);
 
@@ -52,7 +53,6 @@ public class TourServiceImpl implements TourService {
         tourServiceModel.setCategory(categoryServiceModel);
         tourServiceModel.setImage(this.cloudinaryService.uploadImage(tour.getImage()));
         tourServiceModel.setEnabled(true);
-        Tour tour1 = this.modelMapper.map(tourServiceModel, Tour.class);
 
         this.tourRepository.saveAndFlush(this.modelMapper.map(tourServiceModel, Tour.class));
     }
@@ -91,11 +91,13 @@ public class TourServiceImpl implements TourService {
     }
 
 
-    private UserServiceModel getUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return this.modelMapper.map(this.userService.loadUserByUsername(username), UserServiceModel.class);
-    }
+//    private UserServiceModel getUser() {
+////        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+////        String username = authentication.getName();
+//        String username = this.userService.getAuthenticatedUser().getUsername();
+//       return this.modelMapper.map(this.userService.loadUserByUsername(username), UserServiceModel.class);
+//
+//    }
 
     private LocalDateTime getStartedOn(String startAndEnd) {
         String startDate = startAndEnd.substring(0, startAndEnd.indexOf("-"));
