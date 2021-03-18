@@ -1,9 +1,11 @@
 package final_project.travel_agency.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Past;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,7 +25,6 @@ public class Tour extends BaseEntity {
     private Boolean enabled =true;
     private Category category;
     private User creator;
-    private List<String> photos;
     private LocalDate startDate;
 
 
@@ -124,18 +125,8 @@ public class Tour extends BaseEntity {
         this.creator = creator;
     }
 
-    @ElementCollection
-    public List<String> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(List<String> photos) {
-        this.photos = photos;
-    }
-
-
     @Column(nullable = false)
-    @Future(message = "Date must be in the future")
+    @FutureOrPresent(message = "Date must be in the future")
     public LocalDate getStartDate() {
         return startDate;
     }

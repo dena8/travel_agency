@@ -24,7 +24,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handleAllExceptions(Exception ex) {
-        logger.error(ex.getMessage(), ex);
+       // logger.error(ex.getMessage(), ex);
+        logger.info("THIS IS FROM  CONTROLLER ADVICE");
+        logger.error(ex.getMessage());
         return new ResponseEntity<>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

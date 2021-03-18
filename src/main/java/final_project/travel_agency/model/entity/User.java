@@ -1,4 +1,6 @@
 package final_project.travel_agency.model.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;

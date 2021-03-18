@@ -14,14 +14,10 @@ import final_project.travel_agency.service.TourService;
 import final_project.travel_agency.service.UserService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 @Service
@@ -44,7 +40,7 @@ public class TourServiceImpl implements TourService {
     @Override
     public void createTour(TourBindingModel tour) throws NotFoundException, IOException {
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());
-       // UserServiceModel userServiceModel = getUser();
+
         UserServiceModel userServiceModel = this.userService.getAuthenticatedUser();
 
         TourServiceModel tourServiceModel = this.modelMapper.map(tour, TourServiceModel.class);
@@ -63,21 +59,22 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public TourServiceModel getTourById(String id) throws NotFoundException {
+    public TourServiceModel getTourById(String id) {
         Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundEx("Tour not found"));
         return this.modelMapper.map(tour, TourServiceModel.class);
     }
 
     @Override
-    public void deleteTour(String id) throws NotFoundException {
-        Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundEx("Tour not found"));
-        tour.setEnabled(false);
-        this.tourRepository.saveAndFlush(tour);
+    public void deleteTour(String id)  {
+//        Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundEx("Tour not found"));
+//        tour.setEnabled(false);
+        this.tourRepository.enabledTour(id);
+       // this.tourRepository.saveAndFlush(tour);
     }
 
     @Override
-    public void deathLineForTourRegistration() {
-        this.tourRepository.stopTourRegistration(LocalDate.now());
+    public int deathLineForTourRegistration(LocalDate date) {
+      return this.tourRepository.stopTourRegistration(LocalDate.now().plusDays(3));
     }
 
     @Override
@@ -90,20 +87,9 @@ public class TourServiceImpl implements TourService {
         this.tourRepository.resetParticipants(tourId);
     }
 
-
-//    private UserServiceModel getUser() {
-////        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-////        String username = authentication.getName();
-//        String username = this.userService.getAuthenticatedUser().getUsername();
-//       return this.modelMapper.map(this.userService.loadUserByUsername(username), UserServiceModel.class);
-//
-//    }
-
-    private LocalDateTime getStartedOn(String startAndEnd) {
-        String startDate = startAndEnd.substring(0, startAndEnd.indexOf("-"));
-        DateTimeFormatter dtf = DateTimeFormatter
-                .ofPattern("dd/MM/yy HH:mm:ss");
-        return LocalDateTime.parse(startDate + " 00:00:00", dtf);
+    @Override
+    public int deleteExpiredTours(LocalDate date) {
+        return  this.tourRepository.deleteExpiredTour(date);
     }
 
 
