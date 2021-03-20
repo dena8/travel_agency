@@ -1,8 +1,8 @@
 package final_project.travel_agency.service.impl;
 
-
 import final_project.travel_agency.exception.NotFoundEx;
 import final_project.travel_agency.model.binding.TourBindingModel;
+import final_project.travel_agency.model.binding.TourUpdateBindingModel;
 import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.service.CategoryServiceModel;
 import final_project.travel_agency.model.service.TourServiceModel;
@@ -15,6 +15,7 @@ import final_project.travel_agency.service.UserService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -55,7 +56,7 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public TourServiceModel[] getAllTours() {
-      return this.modelMapper.map(this.tourRepository.findAllEnabledTours(), TourServiceModel[].class);
+        return this.modelMapper.map(this.tourRepository.findAllEnabledTours(), TourServiceModel[].class);
     }
 
     @Override
@@ -65,16 +66,16 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public void deleteTour(String id)  {
+    public void deleteTour(String id) {
 //        Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundEx("Tour not found"));
 //        tour.setEnabled(false);
         this.tourRepository.enabledTour(id);
-       // this.tourRepository.saveAndFlush(tour);
+        // this.tourRepository.saveAndFlush(tour);
     }
 
     @Override
     public int deathLineForTourRegistration(LocalDate date) {
-      return this.tourRepository.stopTourRegistration(LocalDate.now().plusDays(3));
+        return this.tourRepository.stopTourRegistration(LocalDate.now().plusDays(3));
     }
 
     @Override
@@ -89,7 +90,30 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public int deleteExpiredTours(LocalDate date) {
-        return  this.tourRepository.deleteExpiredTour(date);
+        return this.tourRepository.deleteExpiredTour(date);
+    }
+
+    @Override
+    public void createUpdate(String id, TourUpdateBindingModel tour) throws NotFoundException, IOException {
+        TourServiceModel tourServiceModel = getTourServiceModel(tour);
+        tourServiceModel.setId(id);
+        if (tour.getImage() instanceof MultipartFile) {
+            tourServiceModel.setImage(this.cloudinaryService.uploadImage((MultipartFile) tour.getImage()));
+        }
+        this.tourRepository.saveAndFlush(this.modelMapper.map(tourServiceModel, Tour.class));
+    }
+
+    private TourServiceModel getTourServiceModel(TourUpdateBindingModel tour) throws NotFoundException {
+        CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());
+
+        UserServiceModel userServiceModel = this.userService.getAuthenticatedUser();
+
+        TourServiceModel tourServiceModel = this.modelMapper.map(tour, TourServiceModel.class);
+
+        tourServiceModel.setCreator(userServiceModel);
+        tourServiceModel.setCategory(categoryServiceModel);
+        tourServiceModel.setEnabled(true);
+        return tourServiceModel;
     }
 
 

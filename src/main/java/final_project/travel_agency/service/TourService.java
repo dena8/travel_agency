@@ -1,6 +1,7 @@
 package final_project.travel_agency.service;
 
 import final_project.travel_agency.model.binding.TourBindingModel;
+import final_project.travel_agency.model.binding.TourUpdateBindingModel;
 import final_project.travel_agency.model.service.TourServiceModel;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,4 +26,6 @@ public interface TourService {
     void resetParticipants(String tourId);
 
     int deleteExpiredTours(LocalDate date);
+
+    void createUpdate(String id,TourUpdateBindingModel tour) throws NotFoundException, IOException;
 }

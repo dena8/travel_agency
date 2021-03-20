@@ -3,6 +3,7 @@ package final_project.travel_agency.web;
 import com.google.gson.Gson;
 import final_project.travel_agency.exception.NotCorrectDataEx;
 import final_project.travel_agency.model.binding.TourBindingModel;
+import final_project.travel_agency.model.binding.TourUpdateBindingModel;
 import final_project.travel_agency.model.dto.WeatherDtoModel;
 import final_project.travel_agency.model.service.TourServiceModel;
 import final_project.travel_agency.model.view.TourViewModel;
@@ -38,7 +39,7 @@ public class TourController {
     private final Gson gson;
 
 
-    public TourController(TourService tourService, ModelMapper modelMapper, RestTemplate restTemplate, Gson gson)  {
+    public TourController(TourService tourService, ModelMapper modelMapper, RestTemplate restTemplate, Gson gson) {
         this.tourService = tourService;
         this.modelMapper = modelMapper;
         this.restTemplate = restTemplate;
@@ -85,6 +86,16 @@ public class TourController {
         boolean success = !weatherAsString.contains("error");
         weather.setSuccess(success);
         return new ResponseEntity<>(weather, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/update/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> updateTour(@PathVariable String id, @Valid @ModelAttribute TourUpdateBindingModel tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
+        if (bindingResult.hasErrors()) {
+            List<String> validationList = bindingResult.getFieldErrors().stream().map(b -> b.getDefaultMessage()).collect(Collectors.toList());
+            throw new NotCorrectDataEx("Provided data is not correct!", validationList);
+        }
+        this.tourService.createUpdate(id, tour);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

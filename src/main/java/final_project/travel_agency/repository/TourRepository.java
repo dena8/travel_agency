@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TourRepository extends JpaRepository<Tour,String> {
+public interface TourRepository extends JpaRepository<Tour, String> {
     Optional<Tour> findById(String id);
 
     @Transactional
@@ -28,15 +28,12 @@ public interface TourRepository extends JpaRepository<Tour,String> {
     void resetParticipants(@Param("id") String id);
 
     @Transactional
-    @Modifying
-    @Query("update Tour set participants = 0 where startDate = :date")
+    @Modifying()
+    @Query(value = "Update tours  set participants = 0 WHERE start_date = :date ", nativeQuery = true)
     int stopTourRegistration(@Param("date") LocalDate date);
 
-
     @Query(value = "SELECT * FROM tours t where enabled is true", nativeQuery = true)
-     Tour[] findAllEnabledTours();
-
-
+    Tour[] findAllEnabledTours();
 
     @Transactional
     @Modifying
@@ -47,7 +44,5 @@ public interface TourRepository extends JpaRepository<Tour,String> {
     @Modifying
     @Query("update Tour t set t.enabled = false where t.startDate=:date ")
     int deleteExpiredTour(@Param("date") LocalDate date);
-
-
 
 }
