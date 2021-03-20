@@ -2,7 +2,6 @@ package final_project.travel_agency.service.impl;
 
 import final_project.travel_agency.exception.NotFoundEx;
 import final_project.travel_agency.model.binding.TourBindingModel;
-import final_project.travel_agency.model.binding.TourUpdateBindingModel;
 import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.service.CategoryServiceModel;
 import final_project.travel_agency.model.service.TourServiceModel;
@@ -22,7 +21,7 @@ import java.time.LocalDate;
 
 
 @Service
-public class TourServiceImpl implements TourService {
+public class TourServiceImpl<T> implements TourService<T> {
     private final TourRepository tourRepository;
     private final ModelMapper modelMapper;
     private final CategoryService categoryService;
@@ -39,18 +38,9 @@ public class TourServiceImpl implements TourService {
 
 
     @Override
-    public void createTour(TourBindingModel tour) throws NotFoundException, IOException {
-        CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());
-
-        UserServiceModel userServiceModel = this.userService.getAuthenticatedUser();
-
-        TourServiceModel tourServiceModel = this.modelMapper.map(tour, TourServiceModel.class);
-
-        tourServiceModel.setCreator(userServiceModel);
-        tourServiceModel.setCategory(categoryServiceModel);
-        tourServiceModel.setImage(this.cloudinaryService.uploadImage(tour.getImage()));
-        tourServiceModel.setEnabled(true);
-
+    public void createTour(TourBindingModel<T> tour) throws NotFoundException, IOException {
+        TourServiceModel tourServiceModel = getTourServiceModel(tour);
+        tourServiceModel.setImage(this.cloudinaryService.uploadImage((MultipartFile) tour.getImage()));
         this.tourRepository.saveAndFlush(this.modelMapper.map(tourServiceModel, Tour.class));
     }
 
@@ -67,10 +57,7 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public void deleteTour(String id) {
-//        Tour tour = this.tourRepository.findById(id).orElseThrow(() -> new NotFoundEx("Tour not found"));
-//        tour.setEnabled(false);
         this.tourRepository.enabledTour(id);
-        // this.tourRepository.saveAndFlush(tour);
     }
 
     @Override
@@ -94,7 +81,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public void createUpdate(String id, TourUpdateBindingModel tour) throws NotFoundException, IOException {
+    public void createUpdate(String id, TourBindingModel<T> tour) throws NotFoundException, IOException {
         TourServiceModel tourServiceModel = getTourServiceModel(tour);
         tourServiceModel.setId(id);
         if (tour.getImage() instanceof MultipartFile) {
@@ -103,11 +90,9 @@ public class TourServiceImpl implements TourService {
         this.tourRepository.saveAndFlush(this.modelMapper.map(tourServiceModel, Tour.class));
     }
 
-    private TourServiceModel getTourServiceModel(TourUpdateBindingModel tour) throws NotFoundException {
+    private TourServiceModel getTourServiceModel(TourBindingModel<T> tour) throws NotFoundException {
         CategoryServiceModel categoryServiceModel = this.categoryService.getCategoryByName(tour.getCategory());
-
         UserServiceModel userServiceModel = this.userService.getAuthenticatedUser();
-
         TourServiceModel tourServiceModel = this.modelMapper.map(tour, TourServiceModel.class);
 
         tourServiceModel.setCreator(userServiceModel);

@@ -3,7 +3,6 @@ package final_project.travel_agency.web;
 import com.google.gson.Gson;
 import final_project.travel_agency.exception.NotCorrectDataEx;
 import final_project.travel_agency.model.binding.TourBindingModel;
-import final_project.travel_agency.model.binding.TourUpdateBindingModel;
 import final_project.travel_agency.model.dto.WeatherDtoModel;
 import final_project.travel_agency.model.service.TourServiceModel;
 import final_project.travel_agency.model.view.TourViewModel;
@@ -11,7 +10,6 @@ import final_project.travel_agency.service.TourService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +27,17 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tours")
-public class TourController {
+public class TourController<T> {
     @Value("${WEATHER_URL}")
     private String weatherUrl;
 
-    private final TourService tourService;
+    private final TourService<T> tourService;
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
     private final Gson gson;
 
 
-    public TourController(TourService tourService, ModelMapper modelMapper, RestTemplate restTemplate, Gson gson) {
+    public TourController(TourService<T> tourService, ModelMapper modelMapper, RestTemplate restTemplate, Gson gson) {
         this.tourService = tourService;
         this.modelMapper = modelMapper;
         this.restTemplate = restTemplate;
@@ -49,7 +47,7 @@ public class TourController {
 
     @PreAuthorize("hasAuthority('GUIDE_ROLE')")
     @PostMapping(value = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Void> createTour(@Valid @ModelAttribute TourBindingModel tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
+    public ResponseEntity<Void> createTour(@Valid @ModelAttribute TourBindingModel<T> tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
         if (bindingResult.hasErrors()) {
             List<String> validationList = bindingResult.getFieldErrors().stream().map(b -> b.getDefaultMessage()).collect(Collectors.toList());
             throw new NotCorrectDataEx("Provided data is not correct!", validationList);
@@ -89,7 +87,7 @@ public class TourController {
     }
 
     @PutMapping(value = "/update/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> updateTour(@PathVariable String id, @Valid @ModelAttribute TourUpdateBindingModel tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
+    public ResponseEntity<Void> updateTour(@PathVariable String id, @Valid @ModelAttribute TourBindingModel<T> tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
         if (bindingResult.hasErrors()) {
             List<String> validationList = bindingResult.getFieldErrors().stream().map(b -> b.getDefaultMessage()).collect(Collectors.toList());
             throw new NotCorrectDataEx("Provided data is not correct!", validationList);
