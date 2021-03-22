@@ -1,4 +1,5 @@
 package final_project.travel_agency.web;
+import com.cloudinary.api.exceptions.NotFound;
 import final_project.travel_agency.model.binding.UserBindingModel;
 import final_project.travel_agency.model.entity.Order;
 import final_project.travel_agency.model.entity.Tour;
@@ -54,19 +55,12 @@ public class CartController {
     @PostMapping("/order")
     public ResponseEntity<Void> createOrder(@RequestBody UserBindingModel userBindingModel) throws NotFoundException {
         User user = (User) this.userService.loadUserByUsername(userBindingModel.getUsername());
-        Order order = createOrder(user);
-        this.orderService.makeOrder(order);
+        this.orderService.makeOrder(user);
         this.orderService.emptiedCard(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private Order createOrder(User user) throws NotFoundException {
-        List<Tour> cart = new ArrayList<>(user.getCart());
-        Order order = new Order();
-        order.setBuyingProducts(cart);
-        order.setCustomer(user);
-        return order;
-    }
+
 
     @PutMapping("/remove-item")
     public ResponseEntity<Void> removeFromCart(@RequestParam("userId") String id, @RequestParam("tourId") String tourId) throws NotFoundException {

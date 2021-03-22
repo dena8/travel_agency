@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    void makeOrder(Order order);
+    void makeOrder(User user) throws NotFoundException;
 
     void emptiedCard(User user) throws NotFoundException;
 
