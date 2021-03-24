@@ -34,9 +34,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void makeOrder(User user) throws NotFoundException {
-        Order order = createOrder(user);
-        Order savedOrder =  this.orderRepository.saveAndFlush(order);
-        this.orderPublisher.publishEvent(savedOrder.getId());
+        throw new NotFoundEx("THIS IS NOT FOUND EX");
+//        Order order = createOrder(user);
+//        Order savedOrder =  this.orderRepository.saveAndFlush(order);
+//        this.orderPublisher.publishEvent(savedOrder.getId());
     }
 
     @Override

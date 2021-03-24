@@ -25,11 +25,15 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findById(String id);
 
-//    @Transactional
-//    @Modifying
-//    @Query("update User as u set u.cart= :cart where u.username = :username")
-//    Integer clearedCard( @Param("username") String username,@Param("cart") List<String> cart);
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE  FROM users_authorities WHERE user_id = (?1)",nativeQuery = true)
+    Integer deleteAuthority(@Param("userId") String userId);
 
-
+    @Transactional
+    @Modifying
+    @Query(value = "insert into users_authorities (user_id,authorities_id)\n" +
+            "VALUES((?1),(?2))",nativeQuery = true)
+    Integer insertUserAuthority(@Param("userId") String userId, @Param("authorityId") String authorityId);
 
 }

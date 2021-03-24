@@ -1,6 +1,7 @@
 package final_project.travel_agency.service.impl;
 
 import final_project.travel_agency.exception.NotFoundEx;
+import final_project.travel_agency.model.binding.UserBindingModel;
 import final_project.travel_agency.model.entity.Authority;
 import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.entity.User;
@@ -9,11 +10,12 @@ import final_project.travel_agency.model.service.UserServiceModel;
 import final_project.travel_agency.repository.AuthorityRepository;
 import final_project.travel_agency.repository.TourRepository;
 import final_project.travel_agency.repository.UserRepository;
+import final_project.travel_agency.service.AuthorityService;
 import final_project.travel_agency.service.TourService;
 import final_project.travel_agency.service.UserService;
-import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,15 +35,17 @@ public class UserServiceImpl implements UserService {
     private final TourService tourService;
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder bcrypt;
+    private final AuthorityService authorityService;
 
 
-    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, TourRepository tourRepository, @Lazy TourService tourService, AuthorityRepository authorityRepository, PasswordEncoder bcrypt) {
+    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, TourRepository tourRepository, @Lazy TourService tourService, AuthorityRepository authorityRepository, PasswordEncoder bcrypt, AuthorityService authorityService) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.tourRepository = tourRepository;
         this.tourService = tourService;
         this.authorityRepository = authorityRepository;
         this.bcrypt = bcrypt;
+        this.authorityService = authorityService;
     }
 
     @Override
@@ -83,7 +87,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeItemFromCart(String id, String tourId)  {
+    public void removeItemFromCart(String id, String tourId) {
         User userEntity = this.userRepository.findById(id).orElseThrow(() -> new NotFoundEx("User not found"));
         Tour tour = this.tourRepository.findById(tourId).orElseThrow(() -> new NotFoundEx("Tour not found"));
         List<Tour> cart = userEntity.getCart();
@@ -92,9 +96,22 @@ public class UserServiceImpl implements UserService {
         this.userRepository.saveAndFlush(userEntity);
     }
 
+    @Override
+    public List<String> getAuthorityNames() {
+        return this.authorityService.getAuthorityNames();
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username)  {
+    public void updateAuthority(UserBindingModel userBindingModel) {
+        User user = this.userRepository.findByUsername(userBindingModel.getUsername()).orElseThrow(() -> new NotFoundEx("user not found"));
+        Authority authority = this.authorityRepository.findByAuthority(userBindingModel.getAuthority()).orElseThrow(() -> new NotFoundEx("authority not found"));
+        this.userRepository.deleteAuthority(user.getId());
+        this.userRepository.insertUserAuthority(user.getId(), authority.getId());
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
         return this.userRepository.findByUsername(username).orElseThrow(() -> new NotFoundEx("No such user exist"));
     }
 

@@ -12,7 +12,7 @@ public class UserBindingModel {
     private String username;
     private String password;
     private String email;
-    private List<AuthorityBindingModel> authorities;
+    private String authority;
 
     public UserBindingModel() {
     }
@@ -47,11 +47,11 @@ public class UserBindingModel {
         this.email = email;
     }
 
-    public List<AuthorityBindingModel> getAuthorities() {
-        return authorities;
+    public String getAuthority() {
+        return authority;
     }
 
-    public void setAuthorities(List<AuthorityBindingModel> authorities) {
-        this.authorities = authorities;
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 }
