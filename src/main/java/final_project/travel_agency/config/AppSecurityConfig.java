@@ -56,7 +56,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(String.valueOf(PathRequest.toStaticResources().atCommonLocations())).permitAll()
                 .antMatchers("/users/*").permitAll()
                 .antMatchers("/tours/all").permitAll()
-                .antMatchers("/tours/test").permitAll()
                 .antMatchers("/categories/*").hasAuthority("GUIDE_ROLE")
                 .antMatchers("/cart/**").hasAuthority("USER_ROLE")
                 .antMatchers("/orders/**").hasAuthority("ADMIN_ROLE")

@@ -41,7 +41,6 @@ public class TourController<T> {
         this.modelMapper = modelMapper;
         this.restTemplate = restTemplate;
         this.gson = gson;
-
     }
 
     @PreAuthorize("hasAuthority('GUIDE_ROLE')")

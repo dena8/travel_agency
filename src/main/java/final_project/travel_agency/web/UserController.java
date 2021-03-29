@@ -30,15 +30,14 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
-    private final Gson gson;
 
 
-    public UserController(ModelMapper modelMapper, UserService userService, JwtUtil jwtUtil, AuthenticationManager authenticationManager, Gson gson) {
+
+    public UserController(ModelMapper modelMapper, UserService userService, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
-        this.gson = gson;
     }
 
     @PostMapping("/register")

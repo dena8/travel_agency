@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/cart")
 public class CartController {
-   // private final ModelMapper modelMapper;
     private final TourService tourService;
     private final UserService userService;
     private final OrderService orderService;
 
 
     public CartController( TourService tourService, UserService userService, OrderService orderService) {
-       // this.modelMapper = modelMapper;
         this.tourService = tourService;
         this.userService = userService;
         this.orderService = orderService;
@@ -28,7 +26,7 @@ public class CartController {
 
     @GetMapping("/add/{id}")
     public ResponseEntity<Void> addTourToCart(@PathVariable String id) throws Exception {
-        this.orderService.addTourToCart(id);
+         this.userService.addTourToCart(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -44,7 +42,7 @@ public class CartController {
     public ResponseEntity<Void> createOrder(@RequestBody UserBindingModel userBindingModel) throws NotFoundException {
         User user = (User) this.userService.loadUserByUsername(userBindingModel.getUsername());
         this.orderService.makeOrder(user);
-        this.orderService.emptiedCard(user);
+        this.userService.emptiedCard(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

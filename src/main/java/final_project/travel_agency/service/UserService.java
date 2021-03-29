@@ -27,4 +27,8 @@ public interface UserService extends UserDetailsService {
     List<String> getAuthorityNames();
 
     void updateAuthority(UserBindingModel userBindingModel);
+
+    void emptiedCard(User user) throws NotFoundException;
+
+    void addTourToCart(String id) throws Exception;
 }

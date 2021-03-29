@@ -14,13 +14,9 @@ public interface OrderService {
 
     void makeOrder(User user) throws NotFoundException;
 
-    void emptiedCard(User user) throws NotFoundException;
-
     List<OrderServiceModel> getAllOrders();
 
     OrderServiceModel getOrderById(String id);
 
     boolean checkIfTourIsAdded(UserServiceModel authUser,String id);
-
-    void addTourToCart(String id) throws Exception;
 }

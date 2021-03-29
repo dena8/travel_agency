@@ -34,6 +34,5 @@ public class CategoryController {
     public ResponseEntity<Void> createCategory(@Valid @RequestBody CategoryBindingModel categoryBindingModel) throws IOException {
         this.categoryService.createCategory(categoryBindingModel);
         return new ResponseEntity<>(HttpStatus.CREATED);
-
     }
 }
