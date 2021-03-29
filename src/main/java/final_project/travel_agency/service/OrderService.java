@@ -21,4 +21,6 @@ public interface OrderService {
     OrderServiceModel getOrderById(String id);
 
     boolean checkIfTourIsAdded(UserServiceModel authUser,String id);
+
+    void addTourToCart(String id) throws Exception;
 }

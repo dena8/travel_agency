@@ -5,9 +5,8 @@ import final_project.travel_agency.model.binding.UserBindingModel;
 import final_project.travel_agency.model.entity.Authority;
 import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.entity.User;
-import final_project.travel_agency.model.service.TourServiceModel;
+import final_project.travel_agency.model.service.AuthorityServiceModel;
 import final_project.travel_agency.model.service.UserServiceModel;
-import final_project.travel_agency.repository.AuthorityRepository;
 import final_project.travel_agency.repository.TourRepository;
 import final_project.travel_agency.repository.UserRepository;
 import final_project.travel_agency.service.AuthorityService;
@@ -15,7 +14,6 @@ import final_project.travel_agency.service.TourService;
 import final_project.travel_agency.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,44 +31,28 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final TourRepository tourRepository;
     private final TourService tourService;
-    private final AuthorityRepository authorityRepository;
     private final PasswordEncoder bcrypt;
     private final AuthorityService authorityService;
 
 
-    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, TourRepository tourRepository, @Lazy TourService tourService, AuthorityRepository authorityRepository, PasswordEncoder bcrypt, AuthorityService authorityService) {
+    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, TourRepository tourRepository, @Lazy TourService tourService,AuthorityService authorityService, PasswordEncoder bcrypt) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.tourRepository = tourRepository;
         this.tourService = tourService;
-        this.authorityRepository = authorityRepository;
         this.bcrypt = bcrypt;
         this.authorityService = authorityService;
     }
 
     @Override
     public void register(UserServiceModel userService) {
-
-        Authority authority = this.authorityRepository.findByAuthority(this.userRepository.count() < 1 ? "GUIDE_ROLE" : "USER_ROLE")
-                .orElse(null);
-//        Authority guide = this.authorityRepository.findByAuthority("GUIDE_ROLE")
-//                .orElse(null);
-
+        AuthorityServiceModel authority =this.modelMapper.map(this.authorityService.getAuthorityBuName((this.userRepository.count() < 1 ? "ADMIN_ROLE" : "USER_ROLE")),AuthorityServiceModel.class);
         User user = this.modelMapper.map(userService, User.class);
         user.setPassword(this.bcrypt.encode(userService.getPassword()));
         List<Authority> authorities = new ArrayList<>();
-        authorities.add(authority);
+        authorities.add(this.modelMapper.map(authority,Authority.class));
         user.setAuthorities(authorities);
         this.userRepository.saveAndFlush(user);
-    }
-
-    @Override
-    public void addTourToCart(User user, TourServiceModel tourServiceModel) {
-        this.userRepository.updateUserCart(user.getId(), tourServiceModel.getId());
-        this.tourService.updateParticipants(tourServiceModel.getId());
-        //  this.tourRepository.updateParticipants(tourServiceModel.getId());
-        System.out.println("ID WHILE UPDATE: " + tourServiceModel.getId());
-        //  this.userRepository.updateU(user.getId(),"new@abv.bg");
     }
 
     @Override
@@ -104,9 +86,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateAuthority(UserBindingModel userBindingModel) {
         User user = this.userRepository.findByUsername(userBindingModel.getUsername()).orElseThrow(() -> new NotFoundEx("user not found"));
-        Authority authority = this.authorityRepository.findByAuthority(userBindingModel.getAuthority()).orElseThrow(() -> new NotFoundEx("authority not found"));
-        this.userRepository.deleteAuthority(user.getId());
-        this.userRepository.insertUserAuthority(user.getId(), authority.getId());
+        UserServiceModel userServiceModel = this.modelMapper.map(user,UserServiceModel.class);
+        AuthorityServiceModel authorityServiceModel = this.authorityService.getAuthorityBuName(userBindingModel.getAuthority());
+        userServiceModel.getAuthorities().remove(0);
+        userServiceModel.getAuthorities().add(authorityServiceModel);
+        this.userRepository.saveAndFlush(this.modelMapper.map(userServiceModel,User.class));
     }
 
 

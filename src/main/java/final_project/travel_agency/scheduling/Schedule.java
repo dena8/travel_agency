@@ -30,6 +30,13 @@ public class Schedule {
 
     }
 
+    @Scheduled(cron = "0 32 15 * * ?")
+    public void stopTourRegistrationTest() {
+        int count = this.tourService.deathLineForTourRegistration(LocalDate.now().plusDays(3));
+        logger.info("Updated {} tours", count);
+
+    }
+
     @Scheduled(fixedRate = 86400000, initialDelay = 60000)
     public void deleteExpiredTours() {
         logger.info("Every 24 hours delete all tours, which expired in the same day");

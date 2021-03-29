@@ -1,33 +1,26 @@
 package final_project.travel_agency.web;
-import com.cloudinary.api.exceptions.NotFound;
 import final_project.travel_agency.model.binding.UserBindingModel;
-import final_project.travel_agency.model.entity.Order;
-import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.entity.User;
-import final_project.travel_agency.model.service.TourServiceModel;
 import final_project.travel_agency.model.service.UserServiceModel;
 import final_project.travel_agency.service.OrderService;
 import final_project.travel_agency.service.TourService;
 import final_project.travel_agency.service.UserService;
 import javassist.NotFoundException;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/cart")
 public class CartController {
-    private final ModelMapper modelMapper;
+   // private final ModelMapper modelMapper;
     private final TourService tourService;
     private final UserService userService;
     private final OrderService orderService;
 
 
-    public CartController(ModelMapper modelMapper, TourService tourService, UserService userService, OrderService orderService) {
-        this.modelMapper = modelMapper;
+    public CartController( TourService tourService, UserService userService, OrderService orderService) {
+       // this.modelMapper = modelMapper;
         this.tourService = tourService;
         this.userService = userService;
         this.orderService = orderService;
@@ -35,12 +28,7 @@ public class CartController {
 
     @GetMapping("/add/{id}")
     public ResponseEntity<Void> addTourToCart(@PathVariable String id) throws Exception {
-        TourServiceModel tourServiceModel = this.tourService.getTourById(id);
-        if (tourServiceModel.getParticipants() < 1) {
-            throw new Exception("No vacant places");
-        }
-        User user = this.modelMapper.map(this.userService.getAuthenticatedUser(), User.class);
-        this.userService.addTourToCart(user, tourServiceModel);
+        this.orderService.addTourToCart(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

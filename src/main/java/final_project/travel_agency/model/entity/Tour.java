@@ -26,9 +26,7 @@ public class Tour extends BaseEntity {
     private Category category;
     private User creator;
     private LocalDate startDate;
-
-
-
+    private List<User> cartUsers;
 
     public Tour() {
 
@@ -126,12 +124,21 @@ public class Tour extends BaseEntity {
     }
 
     @Column(nullable = false)
-    @FutureOrPresent(message = "Date must be in the future")
+    @Future(message = "Date must be in the future")
     public LocalDate getStartDate() {
         return startDate;
     }
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    @ManyToMany(mappedBy = "cart")
+    public List<User> getCartUsers() {
+        return cartUsers;
+    }
+
+    public void setCartUsers(List<User> cartUsers) {
+        this.cartUsers = cartUsers;
     }
 }

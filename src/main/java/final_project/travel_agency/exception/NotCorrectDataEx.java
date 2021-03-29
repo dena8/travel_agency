@@ -9,6 +9,9 @@ public class NotCorrectDataEx extends Exception {
         super(message);
         this.validationList=validationList;
     }
+    public NotCorrectDataEx(String message ) {
+        super(message);
+    }
 
     public List<String> getValidationList() {
         return validationList;

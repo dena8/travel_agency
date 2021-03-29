@@ -46,7 +46,7 @@ public class TourServiceImpl<T> implements TourService<T> {
 
     @Override
     public TourServiceModel[] getAllTours() {
-        return this.modelMapper.map(this.tourRepository.findAllEnabledTours(), TourServiceModel[].class);
+        return this.modelMapper.map(this.tourRepository.findAllByEnabledIsTrue(), TourServiceModel[].class);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class TourServiceImpl<T> implements TourService<T> {
 
     @Override
     public int deathLineForTourRegistration(LocalDate date) {
-        return this.tourRepository.stopTourRegistration(LocalDate.now().plusDays(3));
+        return this.tourRepository.stopTourRegistration(date);
     }
 
     @Override

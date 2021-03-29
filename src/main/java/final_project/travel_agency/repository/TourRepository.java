@@ -29,11 +29,10 @@ public interface TourRepository extends JpaRepository<Tour, String> {
 
     @Transactional
     @Modifying()
-    @Query(value = "Update tours  set participants = 0 WHERE start_date = :date ", nativeQuery = true)
+    @Query(value = "Update Tour  set participants = 0 WHERE startDate = :date ")
     int stopTourRegistration(@Param("date") LocalDate date);
 
-    @Query(value = "SELECT * FROM tours t where enabled is true", nativeQuery = true)
-    Tour[] findAllEnabledTours();
+    List<Tour> findAllByEnabledIsTrue();
 
     @Transactional
     @Modifying

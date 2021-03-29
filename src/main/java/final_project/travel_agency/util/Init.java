@@ -4,6 +4,7 @@ import final_project.travel_agency.model.entity.Authority;
 import final_project.travel_agency.model.entity.Category;
 import final_project.travel_agency.repository.AuthorityRepository;
 import final_project.travel_agency.repository.CategoryRepository;
+import final_project.travel_agency.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ public class Init implements CommandLineRunner {
     private final AuthorityRepository authorityRepository;
     private final CategoryRepository categoryRepository;
 
+
     public Init(AuthorityRepository authorityRepository, CategoryRepository categoryRepository) {
         this.authorityRepository = authorityRepository;
         this.categoryRepository = categoryRepository;
@@ -21,6 +23,9 @@ public class Init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+
+
         if(this.authorityRepository.count()<1){
             Authority admin = new Authority("ADMIN_ROLE");
             Authority user = new Authority("USER_ROLE");

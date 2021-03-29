@@ -26,6 +26,7 @@ public class TourBindingModel<T> {
 
     @NotNull
     @Length(min = 3,max = 20, message = "Tour name must contain between 3 and 20 letters")
+    @Pattern(regexp = "^[A-Za-z0-9\\s]+$",message = "Tour name must contain only digits and letters!")
     public String getName() {
         return name;
     }
@@ -35,7 +36,7 @@ public class TourBindingModel<T> {
     }
 
     @NotNull(message = "Description is required")
-    @Length(min = 3,max = 200, message = "Tour name must contain between 3 and 200 letters")
+    @Length(min = 3,max = 200, message = "Tour description must contain between 3 and 200 letters")
     public String getDescription() {
         return description;
     }
@@ -45,7 +46,6 @@ public class TourBindingModel<T> {
     }
 
     @NotNull(message = "Region is required")
-    @Length(min = 3,max = 200, message = "Tour name must contain between 2 and 200 letters")
     public String getRegion() {
         return region;
     }
@@ -55,7 +55,7 @@ public class TourBindingModel<T> {
     }
 
     @NotNull
-    @Min(value = 0, message = "Number participants must be greater than 0")
+    @Min(value = 1, message = "Number participants must be greater than 0")
     public Integer getParticipants() {
         return participants;
     }

@@ -36,21 +36,20 @@ public class TourController<T> {
     private final RestTemplate restTemplate;
     private final Gson gson;
 
-
     public TourController(TourService<T> tourService, ModelMapper modelMapper, RestTemplate restTemplate, Gson gson) {
         this.tourService = tourService;
         this.modelMapper = modelMapper;
         this.restTemplate = restTemplate;
         this.gson = gson;
-    }
 
+    }
 
     @PreAuthorize("hasAuthority('GUIDE_ROLE')")
     @PostMapping(value = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> createTour(@Valid @ModelAttribute TourBindingModel<T> tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
         if (bindingResult.hasErrors()) {
             List<String> validationList = bindingResult.getFieldErrors().stream().map(b -> b.getDefaultMessage()).collect(Collectors.toList());
-            throw new NotCorrectDataEx("Provided data is not correct!", validationList);
+            throw new NotCorrectDataEx("Provided data is not correct! Must be in the future", validationList);
         }
         this.tourService.createTour(tour);
         return new ResponseEntity<>(HttpStatus.CREATED);

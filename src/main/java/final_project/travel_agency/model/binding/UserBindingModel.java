@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 public class UserBindingModel {
@@ -19,6 +20,7 @@ public class UserBindingModel {
 
     @NotBlank(message = "username is required")
     @Length(min = 3, max = 20, message = "Username must be between 3 and 20 letters")
+    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Username must contain only letters!")
     public String getUsername() {
         return username;
     }
@@ -27,7 +29,7 @@ public class UserBindingModel {
         this.username = username;
     }
 
-    @NotBlank(message = "username is required")
+    @NotBlank(message = "password is required")
     @Length(min = 3, max = 20, message = "Username must be between 3 and 20 letters")
     public String getPassword() {
         return password;
@@ -37,7 +39,7 @@ public class UserBindingModel {
         this.password = password;
     }
 
-    @NotBlank(message = "username is required")
+    @NotBlank(message = "email is required")
     @Email(message = "Please, enter valid email")
     public String getEmail() {
         return email;

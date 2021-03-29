@@ -1,9 +1,10 @@
 package final_project.travel_agency.model.entity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.*;
 
 @Entity
@@ -20,11 +21,6 @@ public class User extends BaseEntity implements UserDetails {
     public User() {
 
     }
-    public User(List<Tour> cart) {
-        this.cart=cart;
-    }
-
-
 
     @Override
     @Transient
@@ -51,6 +47,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Column(nullable = false)
+    @Length(min = 3,max = 20, message = "Username must contain between 3 and 20 letters")
     public String getUsername() {
         return username;
     }
@@ -69,6 +66,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Column(nullable = false, unique = true)
+    @Email(message = "Email is not valid")
     public String getEmail() {
         return email;
     }
@@ -95,7 +93,7 @@ public class User extends BaseEntity implements UserDetails {
         this.createdTours = createdTours;
     }
 
-    @ManyToMany
+    @ManyToMany()
     public List<Tour> getCart() {
         return cart;
     }
