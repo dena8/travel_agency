@@ -31,4 +31,6 @@ public interface UserService extends UserDetailsService {
     void emptiedCard(User user) throws NotFoundException;
 
     void addTourToCart(String id) throws Exception;
+
+    boolean checkIfUserExist(String username);
 }

@@ -4,7 +4,6 @@ import final_project.travel_agency.exception.NotCorrectDataEx;
 import final_project.travel_agency.exception.NotFoundEx;
 import final_project.travel_agency.model.binding.UserBindingModel;
 import final_project.travel_agency.model.entity.Authority;
-import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.entity.User;
 import final_project.travel_agency.model.service.AuthorityServiceModel;
 import final_project.travel_agency.model.service.TourServiceModel;
@@ -114,6 +113,12 @@ public class UserServiceImpl implements UserService {
         user.getCart().add(tourServiceModel);
         this.tourService.updateParticipants(tourServiceModel.getId());
         this.userRepository.saveAndFlush(this.modelMapper.map(user, User.class));
+    }
+
+    @Override
+    public boolean checkIfUserExist(String username) {
+       User user=  this.userRepository.findByUsername(username).orElse(null);
+        return user != null;
     }
 
 

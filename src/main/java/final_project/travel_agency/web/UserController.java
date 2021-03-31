@@ -1,12 +1,10 @@
 package final_project.travel_agency.web;
 
-import com.google.gson.Gson;
 import final_project.travel_agency.model.binding.UserBindingModel;
 import final_project.travel_agency.model.binding.UserRegisterBindingModel;
 import final_project.travel_agency.model.service.UserServiceModel;
 import final_project.travel_agency.model.view.CurrentUserViewModel;
 import final_project.travel_agency.model.view.UserViewModel;
-import final_project.travel_agency.service.AuthorityService;
 import final_project.travel_agency.service.UserService;
 import final_project.travel_agency.util.jwt.JwtUtil;
 import org.modelmapper.ModelMapper;
@@ -82,6 +80,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/find")
+    public ResponseEntity<Boolean> findOneByName(@RequestParam("username") String username){
+      boolean ifExist =  this.userService.checkIfUserExist(username);
+      return ResponseEntity.ok(ifExist);
+    }
 
     private HttpHeaders createAuthorizationHeader(String token) {
         HttpHeaders headers = new HttpHeaders();
