@@ -10,13 +10,13 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class TourBindingModel<T> {
+public class TourBindingModel{
     private String name;
     private String description;
     private String region;
     private Integer participants;
     private String difficultyLevel;
-    private T image;
+    private MultipartFile image;
     private BigDecimal price;
     private String category;
     private LocalDate startDate;
@@ -73,12 +73,11 @@ public class TourBindingModel<T> {
         this.difficultyLevel = difficultyLevel;
     }
 
-    @NotNull
-    public T getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(T image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 

@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 @Service
-public interface TourService<T> {
-    void createTour(TourBindingModel<T> tour) throws NotFoundException, IOException;
+public interface TourService {
+    void createTour(TourBindingModel tour) throws NotFoundException, IOException;
 
     TourServiceModel[] getAllTours();
 
@@ -26,5 +26,5 @@ public interface TourService<T> {
 
     int deleteExpiredTours(LocalDate date);
 
-    void createUpdate(String id,TourBindingModel<T> tourBindingModel) throws NotFoundException, IOException;
+    void createUpdate(String id,TourBindingModel tourBindingModel) throws NotFoundException, IOException;
 }

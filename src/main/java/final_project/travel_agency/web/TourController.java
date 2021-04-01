@@ -18,7 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -31,12 +30,12 @@ public class TourController<T> {
     @Value("${WEATHER_URL}")
     private String weatherUrl;
 
-    private final TourService<T> tourService;
+    private final TourService tourService;
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
     private final Gson gson;
 
-    public TourController(TourService<T> tourService, ModelMapper modelMapper, RestTemplate restTemplate, Gson gson) {
+    public TourController(TourService tourService, ModelMapper modelMapper, RestTemplate restTemplate, Gson gson) {
         this.tourService = tourService;
         this.modelMapper = modelMapper;
         this.restTemplate = restTemplate;
@@ -44,11 +43,11 @@ public class TourController<T> {
     }
 
     @PreAuthorize("hasAuthority('GUIDE_ROLE')")
-    @PostMapping(value = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Void> createTour(@Valid @ModelAttribute TourBindingModel<T> tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
+    @PostMapping(value = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> createTour(@Valid @ModelAttribute TourBindingModel tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
         if (bindingResult.hasErrors()) {
             List<String> validationList = bindingResult.getFieldErrors().stream().map(b -> b.getDefaultMessage()).collect(Collectors.toList());
-            throw new NotCorrectDataEx("Provided data is not correct! Must be in the future", validationList);
+            throw new NotCorrectDataEx("Enter correct data,please!", validationList);
         }
         this.tourService.createTour(tour);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -85,8 +84,9 @@ public class TourController<T> {
     }
 
     @PutMapping(value = "/update/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> updateTour(@PathVariable String id, @Valid @ModelAttribute TourBindingModel<T> tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
-        if (bindingResult.hasErrors()) {
+    public ResponseEntity<Void> updateTour(@PathVariable String id, @Valid @ModelAttribute TourBindingModel tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
+
+        if (bindingResult.hasErrors() && bindingResult.getAllErrors().size() > 1 && !bindingResult.hasFieldErrors("image")) {
             List<String> validationList = bindingResult.getFieldErrors().stream().map(b -> b.getDefaultMessage()).collect(Collectors.toList());
             throw new NotCorrectDataEx("Provided data is not correct!", validationList);
         }

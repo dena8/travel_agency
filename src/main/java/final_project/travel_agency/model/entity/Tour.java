@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -79,6 +80,7 @@ public class Tour extends BaseEntity {
 
 
     @Column(nullable = false)
+    @NotNull
     public String getImage() {
         return image;
     }

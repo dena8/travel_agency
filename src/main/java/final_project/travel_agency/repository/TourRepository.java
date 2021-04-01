@@ -44,4 +44,9 @@ public interface TourRepository extends JpaRepository<Tour, String> {
     @Query("update Tour t set t.enabled = false where t.startDate=:date ")
     int deleteExpiredTour(@Param("date") LocalDate date);
 
+    @Query("SELECT t.image from Tour t WHERE t.id=:id ")
+    String getTourImage(@Param("id") String id);
+
+
+
 }
