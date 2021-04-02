@@ -29,7 +29,7 @@ public interface TourRepository extends JpaRepository<Tour, String> {
 
     @Transactional
     @Modifying()
-    @Query(value = "Update Tour  set participants = 0 WHERE startDate = :date ")
+    @Query(value = "Update Tour  set participants = 0 WHERE startDate = :date and enabled=true and participants>0")
     int stopTourRegistration(@Param("date") LocalDate date);
 
     List<Tour> findAllByEnabledIsTrue();
@@ -41,7 +41,7 @@ public interface TourRepository extends JpaRepository<Tour, String> {
 
     @Transactional
     @Modifying
-    @Query("update Tour t set t.enabled = false where t.startDate=:date ")
+    @Query("update Tour t set t.enabled = false where t.startDate=:date and t.enabled=true")
     int deleteExpiredTour(@Param("date") LocalDate date);
 
     @Query("SELECT t.image from Tour t WHERE t.id=:id ")

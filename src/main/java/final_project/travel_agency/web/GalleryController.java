@@ -8,6 +8,7 @@ import final_project.travel_agency.service.GalleryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class GalleryController {
     }
 
 
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     @PostMapping(value = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> createGallery(@ModelAttribute("galleryBindingModel") GalleryBindingModel galleryBindingModel) {
         this.galleryService.createGallery(galleryBindingModel);

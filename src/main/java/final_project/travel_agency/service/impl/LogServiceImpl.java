@@ -41,4 +41,9 @@ public class LogServiceImpl implements LogService {
     public List<LogDtoModel> getAllLogs() {
         return List.of( this.modelMapper.map(this.logRepository.findAllByOrderByDateAsc(), LogDtoModel[].class));
     }
+
+    @Override
+    public int deleteLogs() {
+      return  this.logRepository.delLog();
+    }
 }

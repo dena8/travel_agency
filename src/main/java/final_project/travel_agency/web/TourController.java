@@ -9,6 +9,8 @@ import final_project.travel_agency.model.view.TourViewModel;
 import final_project.travel_agency.service.TourService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tours")
-public class TourController<T> {
+public class TourController {
     @Value("${WEATHER_URL}")
     private String weatherUrl;
 
@@ -34,6 +36,7 @@ public class TourController<T> {
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
     private final Gson gson;
+    private final Logger logger = LoggerFactory.getLogger(TourController.class);
 
     public TourController(TourService tourService, ModelMapper modelMapper, RestTemplate restTemplate, Gson gson) {
         this.tourService = tourService;
@@ -50,6 +53,7 @@ public class TourController<T> {
             throw new NotCorrectDataEx("Enter correct data,please!", validationList);
         }
         this.tourService.createTour(tour);
+        logger.info("Successful create tour");
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -73,16 +77,18 @@ public class TourController<T> {
     }
 
 
-    @GetMapping("weather-forecasttt")
+    @GetMapping("weather-forecast")
     public ResponseEntity<WeatherDtoModel> getWeather(@RequestParam String region) {
         String weatherAsString = restTemplate.getForObject(weatherUrl + region, String.class);
         WeatherDtoModel weather = this.gson.fromJson(weatherAsString, WeatherDtoModel.class);
         assert weatherAsString != null;
         boolean success = !weatherAsString.contains("error");
         weather.setSuccess(success);
+        logger.info("End point for weather Angular component. Component is present if user is \"already join\" and weather api provides information about the region");
         return new ResponseEntity<>(weather, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('GUIDE_ROLE')")
     @PutMapping(value = "/update/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> updateTour(@PathVariable String id, @Valid @ModelAttribute TourBindingModel tour, BindingResult bindingResult) throws NotCorrectDataEx, NotFoundException, IOException {
 
@@ -90,6 +96,7 @@ public class TourController<T> {
             List<String> validationList = bindingResult.getFieldErrors().stream().map(b -> b.getDefaultMessage()).collect(Collectors.toList());
             throw new NotCorrectDataEx("Provided data is not correct!", validationList);
         }
+        logger.info("Successful update tour");
         this.tourService.createUpdate(id, tour);
         return new ResponseEntity<>(HttpStatus.OK);
     }

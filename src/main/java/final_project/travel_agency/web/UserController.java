@@ -52,7 +52,7 @@ public class UserController {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRegisterBindingModel.getUsername(), userRegisterBindingModel.getPassword()));
         String token = this.jwtUtil.generateToken(this.userService.loadUserByUsername(userRegisterBindingModel.getUsername()));
-        System.out.println("Bearer " + token);
+       // System.out.println("Bearer " + token);
         HttpHeaders headers = createAuthorizationHeader(token);
         UserViewModel user = new UserViewModel();
         user.setUsername(userRegisterBindingModel.getUsername());

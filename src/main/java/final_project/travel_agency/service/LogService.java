@@ -9,4 +9,6 @@ public interface LogService {
     void createLogForOrderErrorAdvice(JoinPoint jp, Throwable ex);
 
     List<LogDtoModel> getAllLogs();
+
+    int deleteLogs();
 }
