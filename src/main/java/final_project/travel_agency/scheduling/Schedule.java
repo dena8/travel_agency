@@ -30,7 +30,7 @@ public class Schedule {
         logger.info("Every day in 0:10 AM setting participants to zero, for every tour which start 3 days after and have vacant place. Updated {} tours", count);
     }
 
-    @Scheduled(cron = "0 16 14 * * ?")
+    @Scheduled(cron = "0 30 18 * * ?")
     public void deleteLogs() {
      int count = this.logService.deleteLogs();
        logger.info("After the end of the working day delete logs. Count deleted logs - {}", count);
