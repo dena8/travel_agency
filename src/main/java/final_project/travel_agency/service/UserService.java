@@ -1,12 +1,8 @@
 package final_project.travel_agency.service;
 
 import final_project.travel_agency.model.binding.UserBindingModel;
-import final_project.travel_agency.model.binding.UserRegisterBindingModel;
-import final_project.travel_agency.model.entity.User;
-import final_project.travel_agency.model.service.TourServiceModel;
 import final_project.travel_agency.model.service.UserServiceModel;
 import javassist.NotFoundException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +22,9 @@ public interface UserService extends UserDetailsService {
 
     List<String> getAuthorityNames();
 
-    void updateAuthority(UserBindingModel userBindingModel);
+   UserServiceModel updateAuthority(UserBindingModel userBindingModel);
 
-    void emptiedCard(User user) throws NotFoundException;
+    void emptiedCard(UserServiceModel user) throws NotFoundException;
 
     void addTourToCart(String id) throws Exception;
 

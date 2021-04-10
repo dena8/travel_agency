@@ -65,7 +65,7 @@ public class User extends BaseEntity implements UserDetails {
         this.password = password;
     }
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Email(message = "Email is not valid")
     public String getEmail() {
         return email;

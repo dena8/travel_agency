@@ -6,6 +6,7 @@ import final_project.travel_agency.service.OrderService;
 import final_project.travel_agency.service.TourService;
 import final_project.travel_agency.service.UserService;
 import javassist.NotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,14 @@ public class CartController {
     private final TourService tourService;
     private final UserService userService;
     private final OrderService orderService;
+    private final ModelMapper modelMapper;
 
 
-    public CartController( TourService tourService, UserService userService, OrderService orderService) {
+    public CartController(TourService tourService, UserService userService, OrderService orderService, ModelMapper modelMapper) {
         this.tourService = tourService;
         this.userService = userService;
         this.orderService = orderService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/add/{id}")
@@ -40,9 +43,9 @@ public class CartController {
 
     @PostMapping("/order")
     public ResponseEntity<Void> createOrder(@RequestBody UserBindingModel userBindingModel) throws NotFoundException {
-        User user = (User) this.userService.loadUserByUsername(userBindingModel.getUsername());
-        this.orderService.makeOrder(user);
-        this.userService.emptiedCard(user);
+        UserServiceModel userServiceModel = this.modelMapper.map(userBindingModel,UserServiceModel.class);
+        this.orderService.makeOrder(userServiceModel);
+        this.userService.emptiedCard(userServiceModel);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

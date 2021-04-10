@@ -3,13 +3,14 @@ package final_project.travel_agency.model.view;
 import final_project.travel_agency.model.entity.Tour;
 import final_project.travel_agency.model.entity.User;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersViewModel {
     private String id;
-    private LocalDateTime buyDate = LocalDateTime.now();
+    private Instant buyDate;
     private UserViewModel customer;
     private List<TourViewModel> buyingProducts= new ArrayList<>();
 
@@ -24,11 +25,11 @@ public class OrdersViewModel {
         this.id = id;
     }
 
-    public LocalDateTime getBuyDate() {
+    public Instant getBuyDate() {
         return buyDate;
     }
 
-    public void setBuyDate(LocalDateTime buyDate) {
+    public void setBuyDate(Instant buyDate) {
         this.buyDate = buyDate;
     }
 

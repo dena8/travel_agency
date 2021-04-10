@@ -18,11 +18,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceModel getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No such user exist"));
+        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new NotFoundEx("No such user exist"));
         return this.modelMapper.map(user, UserServiceModel.class);
     }
 
@@ -81,13 +81,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateAuthority(UserBindingModel userBindingModel) {
+    public UserServiceModel updateAuthority(UserBindingModel userBindingModel) {
         User user = this.userRepository.findByUsername(userBindingModel.getUsername()).orElseThrow(() -> new NotFoundEx("user not found"));
-        UserServiceModel userServiceModel = this.modelMapper.map(user, UserServiceModel.class);
         AuthorityServiceModel authorityServiceModel = this.authorityService.getAuthorityBuName(userBindingModel.getAuthority());
-        userServiceModel.getAuthorities().remove(0);
-        userServiceModel.getAuthorities().add(authorityServiceModel);
-        this.userRepository.saveAndFlush(this.modelMapper.map(userServiceModel, User.class));
+        user.getAuthorities().remove(0);
+        user.getAuthorities().add(this.modelMapper.map(authorityServiceModel, Authority.class));
+        return this.modelMapper.map(this.userRepository.saveAndFlush(user), UserServiceModel.class);
     }
 
 
@@ -97,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void emptiedCard(User currentUser) throws NotFoundException {
+    public void emptiedCard(UserServiceModel currentUser) throws NotFoundException {
         User user = this.userRepository.findByUsername(currentUser.getUsername()).orElseThrow(() -> new NotFoundEx("User not found"));
         user.getCart().clear();
         userRepository.saveAndFlush(user);
@@ -117,7 +116,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkIfUserExist(String username) {
-       User user=  this.userRepository.findByUsername(username).orElse(null);
+        User user = this.userRepository.findByUsername(username).orElse(null);
         return user != null;
     }
 

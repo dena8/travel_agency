@@ -3,7 +3,7 @@ package final_project.travel_agency.model.view;
 public class UserViewModel {
     private String username;
     private String email;
-    //private String password;
+
 
     public UserViewModel() {
     }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,7 +36,8 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OrdersViewModel> getOrder(@PathVariable("id") String id){
-        OrdersViewModel ordersViewModel = modelMapper.map(this.orderService.getOrderById(id),OrdersViewModel.class);
+        OrderServiceModel osm = this.orderService.getOrderById(id).orElseThrow(()->new NoSuchElementException("No such order found"));
+        OrdersViewModel ordersViewModel = modelMapper.map(osm,OrdersViewModel.class);
         return new ResponseEntity<>(ordersViewModel,HttpStatus.OK);
     }
 

@@ -30,7 +30,6 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
 
 
-
     public UserController(ModelMapper modelMapper, UserService userService, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
         this.modelMapper = modelMapper;
         this.userService = userService;
@@ -43,7 +42,7 @@ public class UserController {
     public ResponseEntity<UserViewModel> postRegister(@Valid @RequestBody UserRegisterBindingModel user) {
         UserServiceModel userServiceModel = this.modelMapper.map(user, UserServiceModel.class);
         this.userService.register(userServiceModel);
-        return new ResponseEntity<>(this.modelMapper.map(userServiceModel, UserViewModel.class), HttpStatus.OK);
+        return new ResponseEntity<>(this.modelMapper.map(userServiceModel, UserViewModel.class), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/login")
@@ -67,6 +66,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('GUIDE_ROLE')||hasAuthority('ADMIN_ROLE')")
     @GetMapping("/authorities")
     public ResponseEntity<List<String>> getAuthorityNames() {
         List<String> authorityNames = this.userService.getAuthorityNames();
@@ -74,16 +74,17 @@ public class UserController {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     @PutMapping("/update/authority")
-    public ResponseEntity<Void> updateAuthority(@RequestBody UserBindingModel userBindingModel) {
-        this.userService.updateAuthority(userBindingModel);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserViewModel> updateAuthority(@RequestBody UserBindingModel userBindingModel) {
+        UserServiceModel user = this.userService.updateAuthority(userBindingModel);
+        return ResponseEntity.ok().body(this.modelMapper.map(user, UserViewModel.class));
     }
 
     @GetMapping("/find")
-    public ResponseEntity<Boolean> findOneByName(@RequestParam("username") String username){
-      boolean ifExist =  this.userService.checkIfUserExist(username);
-      return ResponseEntity.ok(ifExist);
+    public ResponseEntity<Boolean> findOneByName(@RequestParam("username") String username) {
+        boolean ifExist = this.userService.checkIfUserExist(username);
+        return ResponseEntity.ok(ifExist);
     }
 
     private HttpHeaders createAuthorizationHeader(String token) {
